@@ -1,9 +1,9 @@
-import React from 'react'
+import { Outlet } from "react-router-dom"
 
 function Custom() {
   return (
     <div>
-      <h1>Custom</h1>
+      <Outlet />
     </div>
   )
 }

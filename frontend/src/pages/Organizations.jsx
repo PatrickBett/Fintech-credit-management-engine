@@ -1,9 +1,9 @@
-import React from 'react'
+import { Outlet } from 'react-router-dom'
 
 function Organizations() {
   return (
     <div>
-        <h1>Organizations</h1>
+        <Outlet />
     </div>
   )
 }

@@ -1,11 +1,9 @@
-import React from 'react'
+import { Outlet } from "react-router-dom";
 
-function Members() {
+export default function Members() {
   return (
-    <div>
-        <h1>Members</h1>
+    <div>   
+      <Outlet />
     </div>
-  )
+  );
 }
-
-export default Members

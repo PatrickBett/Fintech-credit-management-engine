@@ -134,10 +134,10 @@ export default function Sidebar() {
 
         {openSection === "customers" && (
           <>
-            <BulletItem to="/dashboard/customers/active" label="Active" />
-            <BulletItem to="/dashboard/customers/leads" label="Leads" />
-            <BulletItem to="/dashboard/customers/groups" label="Groups" />
-            <BulletItem to="/dashboard/customers/scoring" label="Scoring" />
+            <BulletItem to="/dashboard/members/active" label="Active" />
+            <BulletItem to="/dashboard/members/leads" label="Leads" />
+            <BulletItem to="/dashboard/members/groups" label="Groups" />
+            <BulletItem to="/dashboard/members/scoring" label="Scoring" />
           </>
         )}
 

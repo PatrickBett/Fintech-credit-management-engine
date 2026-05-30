@@ -1,9 +1,10 @@
 import React from 'react'
+import { Outlet } from 'react-router-dom'
 
 function Loans() {
   return (
     <div>
-        <h1>Loans</h1>
+    <Outlet />
       
     </div>
   )
