@@ -1,4 +1,6 @@
-export default function Header() {
+import { FaBars } from "react-icons/fa";
+
+export default function Header({ toggleSidebar }) {
   return (
     <div
       style={{
@@ -11,14 +13,45 @@ export default function Header() {
         padding: "0 20px",
       }}
     >
-      {/* Left side */}
-      <h3 style={{ margin: 0, fontSize: "16px", fontWeight: "600" }}>
-        Dashboard
-      </h3>
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          gap: "15px",
+        }}
+      >
+        <FaBars
+          onClick={toggleSidebar}
+          style={{
+            cursor: "pointer",
+            fontSize: "18px",
+          }}
+        />
 
-      {/* Right side */}
-      <div style={{ display: "flex", gap: "12px", alignItems: "center" }}>
-        <span style={{ fontSize: "14px", color: "#64748b" }}>
+        <h3
+          style={{
+            margin: 0,
+            fontSize: "16px",
+            fontWeight: "600",
+          }}
+        >
+          Dashboard
+        </h3>
+      </div>
+
+      <div
+        style={{
+          display: "flex",
+          gap: "12px",
+          alignItems: "center",
+        }}
+      >
+        <span
+          style={{
+            fontSize: "14px",
+            color: "#64748b",
+          }}
+        >
           Admin
         </span>
 

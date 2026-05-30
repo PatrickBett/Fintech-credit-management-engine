@@ -14,10 +14,13 @@ import {
 } from "react-icons/fa";
 
 /* ------------------ reusable sub link ------------------ */
-const SubLink = ({ to, label }) => {
+const SubLink = ({ to,
+  label,
+  setSidebarOpen }) => {
   return (
     <NavLink
       to={to}
+      
       style={({ isActive }) => ({
         display: "block",
         padding: "7px 12px",
@@ -28,7 +31,12 @@ const SubLink = ({ to, label }) => {
         fontSize: "13px",
         color: isActive ? "#ffffff" : "#94a3b8",
         background: isActive ? "#1d4ed8" : "transparent",
-      })}
+      })} 
+      onClick={() => {
+        if (window.innerWidth <= 768) {
+          setSidebarOpen(false);
+        }
+      }}
     >
       {label}
     </NavLink>
@@ -36,14 +44,20 @@ const SubLink = ({ to, label }) => {
 };
 
 /* ------------------ bullet item ------------------ */
-const BulletItem = ({ to, label }) => (
+const BulletItem = ({ to,
+  label,
+  setSidebarOpen, }) => (
   <div style={{ display: "flex", alignItems: "center" }}>
     <FaCircle style={{ fontSize: "6px", marginLeft: "18px", color: "#64748b" }} />
-    <SubLink to={to} label={label} />
+    <SubLink to={to} label={label} setSidebarOpen={setSidebarOpen} />
   </div>
 );
 
-export default function Sidebar() {
+export default function Sidebar({
+  isMobile,
+  sidebarOpen,
+  setSidebarOpen,
+})  {
   const [openSection, setOpenSection] = useState(null);
 
   const toggleSection = (section) => {
@@ -79,18 +93,30 @@ export default function Sidebar() {
 
   return (
     <div
-      style={{
-        width: "260px",
-        height: "100vh",
-        backgroundColor: "#0f172a",
-        color: "white",
-        padding: "14px",
-        display: "flex",
-        flexDirection: "column",
-        borderRight: "1px solid #1e293b",
-        overflow: "hidden",
-      }}
-    >
+  style={{
+    width: "260px",
+    height: "100vh",
+    backgroundColor: "#0f172a",
+    color: "white",
+    padding: "14px",
+    display: "flex",
+    flexDirection: "column",
+    borderRight: "1px solid #1e293b",
+
+    position: isMobile ? "fixed" : "relative",
+    top: 0,
+    left: 0,
+
+    zIndex: 999,
+
+    transform:
+      isMobile && !sidebarOpen
+        ? "translateX(-100%)"
+        : "translateX(0)",
+
+    transition: "transform 0.3s ease",
+  }}
+>
       {/* ================= LOGO ================= */}
       <div
   style={{
@@ -134,10 +160,10 @@ export default function Sidebar() {
 
         {openSection === "customers" && (
           <>
-            <BulletItem to="/dashboard/members/active" label="Active" />
-            <BulletItem to="/dashboard/members/leads" label="Leads" />
-            <BulletItem to="/dashboard/members/groups" label="Groups" />
-            <BulletItem to="/dashboard/members/scoring" label="Scoring" />
+            <BulletItem to="/dashboard/members/active" label="Active" setSidebarOpen={setSidebarOpen} />
+            <BulletItem to="/dashboard/members/leads" label="Leads" setSidebarOpen={setSidebarOpen} />
+            <BulletItem to="/dashboard/members/groups" label="Groups" setSidebarOpen={setSidebarOpen} />
+            <BulletItem to="/dashboard/members/scoring" label="Scoring" setSidebarOpen={setSidebarOpen} />
           </>
         )}
 
@@ -161,12 +187,12 @@ export default function Sidebar() {
 
         {openSection === "loans" && (
           <>
-            <BulletItem to="/dashboard/loans/all" label="All Loans" />
-            <BulletItem to="/dashboard/loans/defaulters" label="Defaulters" />
-            <BulletItem to="/dashboard/loans/installments" label="Installments" />
-            <BulletItem to="/dashboard/loans/falling-due" label="Falling Due" />
-            <BulletItem to="/dashboard/loans/approvals" label="Approvals" />
-            <BulletItem to="/dashboard/loans/products" label="Loan Products" />
+            <BulletItem to="/dashboard/loans/all" label="All Loans" setSidebarOpen={setSidebarOpen} />
+            <BulletItem to="/dashboard/loans/defaulters" label="Defaulters" setSidebarOpen={setSidebarOpen} />
+            <BulletItem to="/dashboard/loans/installments" label="Installments" setSidebarOpen={setSidebarOpen} />
+            <BulletItem to="/dashboard/loans/falling-due" label="Falling Due" setSidebarOpen={setSidebarOpen} />
+            <BulletItem to="/dashboard/loans/approvals" label="Approvals" setSidebarOpen={setSidebarOpen} />
+            <BulletItem to="/dashboard/loans/products" label="Loan Products" setSidebarOpen={setSidebarOpen} />
           </>
         )}
 
@@ -180,8 +206,8 @@ export default function Sidebar() {
 
         {openSection === "org" && (
           <>
-            <BulletItem to="/dashboard/org/staff" label="Staff" />
-            <BulletItem to="/dashboard/org/branches" label="Branches" />
+            <BulletItem to="/dashboard/org/staff" label="Staff" setSidebarOpen={setSidebarOpen} />
+            <BulletItem to="/dashboard/org/branches" label="Branches" setSidebarOpen={setSidebarOpen} />
           </>
         )}
 
@@ -195,10 +221,10 @@ export default function Sidebar() {
 
         {openSection === "reports" && (
           <>
-            <BulletItem to="/dashboard/reports/all" label="All Reports" />
-            <BulletItem to="/dashboard/reports/allocations" label="Allocations" />
-            <BulletItem to="/dashboard/reports/analytics" label="Analytics" />
-            <BulletItem to="/dashboard/reports/profile" label="Profile" />
+            <BulletItem to="/dashboard/reports/all" label="All Reports" setSidebarOpen={setSidebarOpen} />
+            <BulletItem to="/dashboard/reports/allocations" label="Allocations" setSidebarOpen={setSidebarOpen} />
+            <BulletItem to="/dashboard/reports/analytics" label="Analytics" setSidebarOpen={setSidebarOpen} />
+            <BulletItem to="/dashboard/reports/profile" label="Profile" setSidebarOpen={setSidebarOpen} />
           </>
         )}
 
@@ -212,12 +238,12 @@ export default function Sidebar() {
 
         {openSection === "accounting" && (
           <>
-            <BulletItem to="/dashboard/accounting/income-statement" label="Income Statement" />
-            <BulletItem to="/dashboard/accounting/balance-sheet" label="Balance Sheet" />
-            <BulletItem to="/dashboard/accounting/defaulter-ageing" label="Defaulter Ageing" />
-            <BulletItem to="/dashboard/accounting/trial-balance" label="Trial Balance" />
-            <BulletItem to="/dashboard/accounting/audit" label="Audit" />
-            <BulletItem to="/dashboard/accounting/expenses" label="Expenses" />
+            <BulletItem to="/dashboard/accounting/income-statement" label="Income Statement" setSidebarOpen={setSidebarOpen} />
+            <BulletItem to="/dashboard/accounting/balance-sheet" label="Balance Sheet" setSidebarOpen={setSidebarOpen} />
+            <BulletItem to="/dashboard/accounting/defaulter-ageing" label="Defaulter Ageing" setSidebarOpen={setSidebarOpen} />
+            <BulletItem to="/dashboard/accounting/trial-balance" label="Trial Balance" setSidebarOpen={setSidebarOpen} />
+            <BulletItem to="/dashboard/accounting/audit" label="Audit" setSidebarOpen={setSidebarOpen} />
+            <BulletItem to="/dashboard/accounting/expenses" label="Expenses" setSidebarOpen={setSidebarOpen} />
           </>
         )}
 
@@ -239,7 +265,7 @@ export default function Sidebar() {
 
         {openSection === "custom" && (
           <>
-            <BulletItem to="/dashboard/custom/credit-limits" label="Credit Limits" />
+            <BulletItem to="/dashboard/custom/credit-limits" label="Credit Limits" setSidebarOpen={setSidebarOpen} />
           </>
         )}
 
