@@ -113,7 +113,7 @@ export default function Sidebar() {
   <span
     style={{
       color: "white",
-      fontSize: "18px",
+      fontSize: "30px",
       fontWeight: "600",
       letterSpacing: "0.5px",
     }}
@@ -212,10 +212,10 @@ export default function Sidebar() {
 
         {openSection === "accounting" && (
           <>
-            <BulletItem to="/dashboard/accounting/income" label="Income Statement" />
-            <BulletItem to="/dashboard/accounting/balance" label="Balance Sheet" />
-            <BulletItem to="/dashboard/accounting/ageing" label="Defaulter Ageing" />
-            <BulletItem to="/dashboard/accounting/trial" label="Trial Balance" />
+            <BulletItem to="/dashboard/accounting/income-statement" label="Income Statement" />
+            <BulletItem to="/dashboard/accounting/balance-sheet" label="Balance Sheet" />
+            <BulletItem to="/dashboard/accounting/defaulter-ageing" label="Defaulter Ageing" />
+            <BulletItem to="/dashboard/accounting/trial-balance" label="Trial Balance" />
             <BulletItem to="/dashboard/accounting/audit" label="Audit" />
             <BulletItem to="/dashboard/accounting/expenses" label="Expenses" />
           </>
