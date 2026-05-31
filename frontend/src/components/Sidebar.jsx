@@ -162,7 +162,7 @@ export default function Sidebar({
           <>
             <BulletItem to="/dashboard/members/active" label="Active" setSidebarOpen={setSidebarOpen} />
             <BulletItem to="/dashboard/members/leads" label="Leads" setSidebarOpen={setSidebarOpen} />
-            <BulletItem to="/dashboard/members/groups" label="Groups" setSidebarOpen={setSidebarOpen} />
+            <BulletItem to="/dashboard/members/groups" label="Groups/Employers" setSidebarOpen={setSidebarOpen} />
             <BulletItem to="/dashboard/members/scoring" label="Scoring" setSidebarOpen={setSidebarOpen} />
           </>
         )}

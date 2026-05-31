@@ -61,7 +61,7 @@ function Groups() {
               <th>ID</th>
               <th>Group Name</th>
               <th>Total Members</th>
-              <th>Exposure</th>
+              <th>Max Exposure</th>
               <th>Risk Tier</th>
               <th>Total Loans</th>
               
