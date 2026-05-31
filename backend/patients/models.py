@@ -48,6 +48,17 @@ class Customer(models.Model):
         related_name="created_customers"
     )
 
+    status = models.CharField(
+        max_length=20,
+        choices=[
+            ("LEAD", "Lead"),
+            ("ACTIVE", "Active"),
+            ("BLOCKED", "Blocked"),
+            
+        ],
+        default="LEAD"
+    )
+
     def __str__(self):
         return f"{self.first_name} {self.last_name} ({self.primary_mobile})"
 
@@ -75,17 +86,6 @@ class CreditProfile(models.Model):
 
     current_limit = models.DecimalField(max_digits=12, decimal_places=2, default=0)
     total_loans = models.IntegerField(default=0)
-
-    status = models.CharField(
-        max_length=20,
-        choices=[
-            ("LEAD", "Lead"),
-            ("ACTIVE", "Active"),
-            ("SUSPENDED", "Suspended"),
-            ("CLOSED", "Closed")
-        ],
-        default="LEAD"
-    )
 
     def __str__(self):
         return f"Credit Profile - {self.customer.first_name} {self.customer.last_name}"

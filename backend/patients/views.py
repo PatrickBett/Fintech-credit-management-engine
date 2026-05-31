@@ -9,6 +9,10 @@ from .models import Customer, Product, CreditProfile, CustomerKYC
 class CustomerListCreateView(APIView):
     def get(self, request):
         customers = Customer.objects.all()
+        #read query param for filtering based on status(active/lead)
+        status_param = request.query_params.get("status")
+        if status_param:
+            customers = customers.filter(status__iexact=status_param)
         serializer = CustomerSerializer(customers, many=True)
         return Response(serializer.data)
 

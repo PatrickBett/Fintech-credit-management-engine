@@ -3,10 +3,10 @@ import { Outlet } from 'react-router-dom'
 
 function Loans() {
   return (
-    <div>
+    <>
     <Outlet />
       
-    </div>
+    </>
   )
 }
 
