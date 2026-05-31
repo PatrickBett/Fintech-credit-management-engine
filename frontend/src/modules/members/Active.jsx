@@ -1,12 +1,17 @@
 import { useMembers } from "../../hooks/useMembers";
+import { useAddMember } from "../../hooks/useMembers";
 import { FaEye, FaComment, FaPlus, FaSearch } from "react-icons/fa";
+import AddCustomerModal from "../../modals/customer/AddCustomerModal";
+import { useState } from "react";
 
 function Active() {
-  const { members, isLoading, error } = useMembers();
+ 
+  const { members, isPending, error } = useMembers();
+   const { addMember } = useAddMember();
   const activeMembers = members.filter(m => m.status === "ACTIVE");
 
-  if (isLoading) return <div style={styles.state}>Loading...</div>;
-  if (error) return <div style={styles.state}>Error loading active members</div>;
+  if (isPending) return <div style={styles.state}>Loading...</div>;
+  if (error) return <div style={styles.state}>Error loading active customers</div>;
 
   return (
     <div style={styles.page}>
@@ -38,7 +43,10 @@ function Active() {
           <option>All Agents</option>
         </select>
 
-        <button style={styles.addBtn}>
+        <button
+        style={styles.addBtn}
+        data-bs-toggle="modal"
+        data-bs-target="#addMemberModal">
           <FaPlus /> ADD NEW
         </button>
       </div>
@@ -83,7 +91,7 @@ function Active() {
           <tbody>
             {activeMembers?.map((m, index) => (
               <tr key={m.uid} style={{ background: "#f9f9f9", borderBottom: "1px solid #ddd" }}>
-                <td>{index + 1}</td>  
+               <td>{index + 1}</td>  
                 <td>{m.national_id}</td>
 
                 <td>
@@ -100,7 +108,7 @@ function Active() {
                 </td>
 
                 <td>
-                  Name: {m.added_by.username}<br />
+                  {/* Name: {m.added_by.username}<br /> */}
                   Role: BRANCH-MAN
                 </td>
 
@@ -145,8 +153,12 @@ function Active() {
           <button>Next →</button>
         </div>
       </div>
+     
+      <AddCustomerModal addMember={addMember} />
     </div>
+    
   );
+ 
 }
 
 export default Active;
@@ -255,7 +267,6 @@ const styles = {
 
   status: {
     background: "green",
-    color: "#fff",
     padding: "4px 8px",
     borderRadius: "6px",
     fontSize: "12px",

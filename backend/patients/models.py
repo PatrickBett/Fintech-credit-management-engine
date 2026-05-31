@@ -11,7 +11,7 @@ class Customer(models.Model):
 
     first_name = models.CharField(max_length=255)
     last_name = models.CharField(max_length=255)
-    national_id = models.CharField(max_length=50, blank=True, null=True)
+    national_id = models.CharField(max_length=50, blank=True, null=True, unique = True)
     employer = models.ForeignKey(
         Employer,
         on_delete=models.SET_NULL,
@@ -35,7 +35,7 @@ class Customer(models.Model):
 
     physical_address = models.TextField(blank=True)
 
-    primary_mobile = models.CharField(max_length=20)
+    primary_mobile = models.CharField(max_length=20, unique=True)
 
     email = models.EmailField(blank=True, null=True)
 

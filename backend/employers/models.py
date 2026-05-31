@@ -29,6 +29,8 @@ class Employer(TimeStampedModel):
 
     name = models.CharField(max_length=255, unique=True)
     code = models.CharField(max_length=50, unique=True)
+    total_members = models.IntegerField(default=0)
+    total_loans = models.DecimalField(max_digits=12, decimal_places=2, default=0)
 
     status = models.CharField(
         max_length=20,

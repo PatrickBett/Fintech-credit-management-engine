@@ -4,9 +4,9 @@ from django.db import models
 class Facility(models.Model):
     name = models.CharField(max_length=255)
     code = models.CharField(max_length=50, unique=True)
-
+    total_members = models.IntegerField(default=0)
+    total_loans = models.DecimalField(max_digits=12, decimal_places=2, default=0)
     location = models.CharField(max_length=255)
-
     is_active = models.BooleanField(default=True)
 
     def __str__(self):

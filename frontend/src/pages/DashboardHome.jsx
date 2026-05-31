@@ -1,8 +1,13 @@
 import React from "react";
+import { useMembers } from "../hooks/useMembers";
+import { useEmployers } from "../hooks/useEmployers";
 
 function DashboardHome() {
+  const { members } = useMembers();
+  const { employers } = useEmployers();
+
   const stats = [
-    { label: "Total Customers", value: "1,248", change: "+12%", color: "#1d4ed8" },
+    { label: "Total Customers", value: members.length.toString(), change: "+12%", color: "#1d4ed8" },
     { label: "Active Loans", value: "342", change: "+5%", color: "#16a34a" },
     { label: "Pending Approvals", value: "28", change: "-3%", color: "#f59e0b" },
     { label: "Total Revenue", value: "$54,230", change: "+18%", color: "#9333ea" },
@@ -30,7 +35,7 @@ function DashboardHome() {
       <div style={{ marginBottom: "20px" }}>
         <h2 style={{ margin: 0 }}>Dashboard Overview</h2>
         <p style={{ color: "#6b7280", marginTop: "5px" }}>
-          Welcome back — here is your system summary
+          Welcome back — here is your cureplus summary
         </p>
       </div>
 

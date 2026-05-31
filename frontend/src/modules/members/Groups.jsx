@@ -1,11 +1,13 @@
-import { useMembers } from "../../hooks/useMembers";
+import { useEmployers, useAddEmployer } from "../../hooks/useEmployers";
 import { FaEye, FaComment, FaPlus, FaSearch } from "react-icons/fa";
+import AddEmployerModal from "../../modals/customer/AddEmployerModal";
 
 function Groups() {
-  const { members, isLoading, error } = useMembers();
+  const { employers, isPending, error } = useEmployers();
+  const { addEmployer } = useAddEmployer();
 
-  if (isLoading) return <div style={styles.state}>Loading...</div>;
-  if (error) return <div style={styles.state}>Error loading groups</div>;
+  if (isPending) return <div style={styles.state}>Loading...</div>;
+  if (error) return <div style={styles.state}>Error loading employers</div>;
 
   return (
     <div style={styles.page}>
@@ -26,7 +28,9 @@ function Groups() {
           <option>All Branches</option>
         </select>
 
-        <button style={styles.addBtn}>
+        <button style={styles.addBtn}
+         data-bs-toggle="modal"
+         data-bs-target="#addEmployerModal">
           <FaPlus /> ADD NEW
         </button>
       </div>
@@ -34,7 +38,7 @@ function Groups() {
       {/* SEARCH ROW */}
       <div style={styles.searchRow}>
         <div style={styles.record}>
-          <span style={styles.badgeCount}>{members?.length || 0}</span>
+          <span style={styles.badgeCount}>{employers?.length || 0}</span>
           Record Found
         </div>
 
@@ -57,6 +61,8 @@ function Groups() {
               <th>ID</th>
               <th>Group Name</th>
               <th>Total Members</th>
+              <th>Exposure</th>
+              <th>Risk Tier</th>
               <th>Total Loans</th>
               
               <th>Branch</th>
@@ -67,20 +73,22 @@ function Groups() {
           </thead>
 
           <tbody>
-            {members?.map((m) => (
-              <tr key={m.uid} style={{ background: "#f9f9f9", borderBottom: "1px solid #ddd" }}>
-                <td>{m.uid}</td>
-                <td>{m.group_name}</td>
-                <td>{m.total_members}</td>
-                <td>{m.total_loans}</td>
-                <td>{m.branch}</td>
+            {employers?.map((e, index) => (
+              <tr key={e.id} style={{ background: "#f9f9f9", borderBottom: "1px solid #ddd" }}>
+                <td>{index + 1}</td>
+                <td>{e.name}</td>
+                <td>{e.total_members}</td>
+                <td>{e.max_exposure}</td>
+                <td>{e.risk_tier}</td>
+                <td>{e.total_loans}</td>
+                <td>{e.branch}--</td>
                 <td>
-                  <span style={styles.status}>{m.status}</span>
+                  <span style={styles.status}>{e.status}</span>
                 </td>
                 <td>
                   <div style={styles.actions}>
                     <FaEye style={{ color: "#3498db", cursor: "pointer" }} />
-                    <FaComment style={{ color: "#f39c12", cursor: "pointer" }} />
+                    {/* <FaComment style={{ color: "#f39c12", cursor: "pointer" }} /> */}
                   </div>
                 </td>
 
@@ -105,6 +113,7 @@ function Groups() {
           <button>Next →</button>
         </div>
       </div>
+      <AddEmployerModal addEmployer={addEmployer} />
     </div>
   );
 }

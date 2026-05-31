@@ -1,11 +1,16 @@
 import { useMembers } from "../../hooks/useMembers";
+import { useAddMember } from "../../hooks/useMembers";
 import { FaEye, FaComment, FaPlus, FaSearch } from "react-icons/fa";
+import AddCustomerModal from "../../modals/customer/AddCustomerModal";
+import { useState } from "react";
 
 function Leads() {
-  const { members, isLoading, error } = useMembers();
+ 
+  const { members, isPending, error } = useMembers();
+   const { addMember } = useAddMember();
   const leadMembers = members.filter(m => m.status === "LEAD");
 
-  if (isLoading) return <div style={styles.state}>Loading...</div>;
+  if (isPending) return <div style={styles.state}>Loading...</div>;
   if (error) return <div style={styles.state}>Error loading leads</div>;
 
   return (
@@ -38,7 +43,10 @@ function Leads() {
           <option>All Agents</option>
         </select>
 
-        <button style={styles.addBtn}>
+        <button
+        style={styles.addBtn}
+        data-bs-toggle="modal"
+        data-bs-target="#addMemberModal">
           <FaPlus /> ADD NEW
         </button>
       </div>
@@ -100,7 +108,7 @@ function Leads() {
                 </td>
 
                 <td>
-                  Name: {m.added_by.username}<br />
+                  {/* Name: {m.added_by.username}<br /> */}
                   Role: BRANCH-MAN
                 </td>
 
@@ -145,8 +153,12 @@ function Leads() {
           <button>Next →</button>
         </div>
       </div>
+     
+      <AddCustomerModal addMember={addMember} />
     </div>
+    
   );
+ 
 }
 
 export default Leads;
