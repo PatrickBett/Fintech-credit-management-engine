@@ -1,6 +1,6 @@
-from .views import RepaymentListCreateView
+from .views import PaymentListCreateView
 from django.urls import path
 
 urlpatterns = [
-    path('', RepaymentListCreateView.as_view(), name='repayment-list-create'),
+    path('', PaymentListCreateView.as_view(), name='payment-list-create'),
 ]

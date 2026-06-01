@@ -1,6 +1,7 @@
 from django.db import models
 from patients.models import Customer
-from loans.models import Loan
+from transactions.models import Transaction
+from employers.models import Employer
 
 
 class PaymentMethod(models.Model):
@@ -27,13 +28,6 @@ class PaymentFor(models.Model):
         return self.name
 
 
-class Group(models.Model):
-    name = models.CharField(max_length=255, unique=True)
-    description = models.TextField(blank=True)
-
-    def __str__(self):
-        return self.name
-
 
 class Bank(models.Model):
     name = models.CharField(max_length=255, unique=True)
@@ -56,7 +50,7 @@ class Payment(models.Model):
     )
 
     loan = models.ForeignKey(
-        Loan,
+        Transaction,
         on_delete=models.CASCADE,
         related_name="payments"
     )
@@ -82,12 +76,12 @@ class Payment(models.Model):
         on_delete=models.PROTECT
     )
 
-    bank = models.ForeignKey(
-        Bank,
-        on_delete=models.PROTECT,
-        blank=True,
-        null=True
-    )
+    # bank = models.ForeignKey(
+    #     Bank,
+    #     on_delete=models.PROTECT,
+    #     blank=True,
+    #     null=True
+    # )
 
     payment_for = models.ForeignKey(
         PaymentFor,
@@ -95,10 +89,11 @@ class Payment(models.Model):
     )
 
     group = models.ForeignKey(
-        Group,
+        Employer,
         on_delete=models.SET_NULL,
         null=True,
-        blank=True
+        blank=True,
+        related_name="payments"
     )
 
     date_made = models.DateField()

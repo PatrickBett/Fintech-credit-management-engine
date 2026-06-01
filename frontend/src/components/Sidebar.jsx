@@ -175,6 +175,14 @@ export default function Sidebar({
           <FaUserTie /> CRM
         </NavLink>
 
+        {/* ================= PAYMENTS ================= */}
+        <NavLink
+          to="/dashboard/payments"
+          style={({ isActive }) => linkStyle(isActive)}
+        >
+          <FaCreditCard /> Payments
+        </NavLink>
+
         
 
         {/* ================= LOANS ================= */}
@@ -247,13 +255,7 @@ export default function Sidebar({
           </>
         )}
 
-        {/* ================= PAYMENTS ================= */}
-        <NavLink
-          to="/dashboard/payments"
-          style={({ isActive }) => linkStyle(isActive)}
-        >
-          <FaCreditCard /> Payments
-        </NavLink>
+        
 
         {/* ================= CUSTOM ================= */}
         <div onClick={() => toggleSection("custom")} style={sectionStyle}>
