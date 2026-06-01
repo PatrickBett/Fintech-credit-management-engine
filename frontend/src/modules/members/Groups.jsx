@@ -55,7 +55,7 @@ function Groups() {
 
       {/* TABLE */}
       <div style={styles.tableWrapper}>
-        <table style={styles.table} className="table table-striped table-responsive">
+        <table style={styles.table} className="table table-striped table-responsive table-bordered">
           <thead>
             <tr>
               <th>ID</th>

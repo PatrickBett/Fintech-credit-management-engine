@@ -1,4 +1,4 @@
-import { usePayments } from "../../hooks/usePayments";
+import { useTransactions } from "../../hooks/useTransactions";
 import { useAddMember } from "../../hooks/useMembers";
 import { FaEye, FaComment, FaPlus, FaSearch } from "react-icons/fa";
 import AddCustomerModal from "../../modals/customer/AddCustomerModal";
@@ -6,8 +6,8 @@ import { useState } from "react";
 
 function AllLoans() {
  
-  const { payments, isPending, error } = usePayments();
-  console.log("Payments data:", payments);
+  const { transactions, isPending, error } = useTransactions();
+  console.log("Transactions data:", transactions);
    const { addMember } = useAddMember();
  
 
@@ -55,7 +55,7 @@ function AllLoans() {
       {/* SEARCH ROW */}
       <div style={styles.searchRow}>
         <div style={styles.record}>
-          <span style={styles.badgeCount}>{payments?.length || 0}</span>
+          <span style={styles.badgeCount}>{transactions?.length || 0}</span>
           Record Found
         </div>
 
@@ -72,7 +72,7 @@ function AllLoans() {
 
       {/* TABLE */}
       <div style={styles.tableWrapper}>
-        <table style={styles.table} className="table table-striped table-responsive">
+        <table style={styles.table} className="table table-striped table-responsive table-bordered">
           <thead>
             <tr>
               <th>CODE</th>
@@ -92,38 +92,38 @@ function AllLoans() {
           </thead>
 
           <tbody>
-            {payments?.map((p) => (
-              <tr key={p.id} style={{ background: "#f9f9f9", borderBottom: "1px solid #ddd" }}>
-               <td>{p.loan.code}</td>  
-                <td>{p.customer.first_name} {p.customer.last_name}</td>
+            {transactions?.map((t) => (
+              <tr key={t.id} style={{ background: "#f9f9f9", borderBottom: "1px solid #ddd" }}>
+               <td>{t.code}</td>  
+                <td>{t.customer.first_name} {t.customer.last_name}</td>
 
                 <td>
-                  {p.loan.principal}
+                  {t.principal}
                 </td>
 
                 <td>
-                  {p.loan.addons}
+                  {t.addons}
                 </td>
 
                 <td>
-                  {p.loan.deductions}<br />
+                  {t.deductions}<br />
                   
                 </td>
 
-                <td style={styles.phone}>{p.loan.repaid_amount}</td>
+                <td style={styles.phone}>{t.repaid_amount}</td>
 
                 <td>
-                  {p.loan.balance}<br />
+                  {t.balance}<br />
                   
                 </td>
 
-                <td>{p.loan.disbursed_date}</td>
+                <td>{t.disbursed_date}</td>
 
-                <td>{p.loan.due_date}</td>
+                <td>{t.due_date}</td>
                 <td>CO:</td>
 
                 <td>
-                  <span style={styles.status}>{p.status.name}</span>
+                  <span style={styles.status}>{t.status.name}</span>
                 </td>
                 <td>---</td>
 
