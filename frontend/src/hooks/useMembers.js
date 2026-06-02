@@ -33,9 +33,6 @@ export const useAddMember = () => {
         mutationFn: addMember,
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['members']})
-        },
-        onError: (error) => {
-            console.error('Error adding member:', error);
         }
      });
     return { addMember: mutate,isPending, error };

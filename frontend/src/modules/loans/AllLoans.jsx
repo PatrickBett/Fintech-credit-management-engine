@@ -1,28 +1,27 @@
 import { useTransactions } from "../../hooks/useTransactions";
 import { useAddMember } from "../../hooks/useMembers";
 import { FaEye, FaComment, FaPlus, FaSearch } from "react-icons/fa";
-import AddCustomerModal from "../../modals/customer/AddCustomerModal";
+import AddLoanModal from "../../modals/customer/AddLoanModal";
 import { useState } from "react";
 
 function AllLoans() {
- 
   const { transactions, isPending, error } = useTransactions();
   console.log("Transactions data:", transactions);
-   const { addMember } = useAddMember();
- 
+  const { addMember } = useAddMember();
 
   if (isPending) return <div style={styles.state}>Loading...</div>;
-  if (error) return <div style={styles.state}>Error loading active customers</div>;
+  if (error)
+    return <div style={styles.state}>Error loading active customers</div>;
 
   return (
     <div style={styles.page}>
       {/* HEADER */}
       <div style={styles.header}>
-        <h2>Loans <span style={styles.subTitle}>List</span></h2>
+        <h2>
+          Loans <span style={styles.subTitle}>List</span>
+        </h2>
 
-        <div style={styles.breadcrumb}>
-          Home &gt; Loans
-        </div>
+        <div style={styles.breadcrumb}>Home &gt; Loans</div>
       </div>
 
       {/* TOOLBAR */}
@@ -45,9 +44,11 @@ function AllLoans() {
         </select>
 
         <button
-        style={styles.addBtn}
-        data-bs-toggle="modal"
-        data-bs-target="#addMemberModal">
+          style={styles.addBtn}
+          data-bs-toggle="modal"
+          data-bs-target="#addLoanModal"
+          
+        >
           <FaPlus /> ADD NEW
         </button>
       </div>
@@ -72,7 +73,10 @@ function AllLoans() {
 
       {/* TABLE */}
       <div style={styles.tableWrapper}>
-        <table style={styles.table} className="table table-striped table-responsive table-bordered">
+        <table
+          style={styles.table}
+          className="table table-striped table-responsive table-bordered"
+        >
           <thead>
             <tr>
               <th>CODE</th>
@@ -84,7 +88,7 @@ function AllLoans() {
               <th>Balance</th>
               <th>Disbursed Date</th>
               <th>Due Date</th>
-              <th>BDO</th>    
+              <th>BDO</th>
               <th>Status</th>
               <th>Flag</th>
               <th>Action</th>
@@ -93,28 +97,32 @@ function AllLoans() {
 
           <tbody>
             {transactions?.map((t) => (
-              <tr key={t.id} style={{ background: "#f9f9f9", borderBottom: "1px solid #ddd" }}>
-               <td>{t.code}</td>  
-                <td>{t.customer.first_name} {t.customer.last_name}</td>
-
+              <tr
+                key={t.id}
+                style={{
+                  background: "#f9f9f9",
+                  borderBottom: "1px solid #ddd",
+                }}
+              >
+                <td>{t.code}</td>
                 <td>
-                  {t.principal}
+                  {t.customer.first_name} {t.customer.last_name}
                 </td>
 
-                <td>
-                  {t.addons}
-                </td>
+                <td>{t.principal}</td>
+
+                <td>{t.addons}</td>
 
                 <td>
-                  {t.deductions}<br />
-                  
+                  {t.deductions}
+                  <br />
                 </td>
 
                 <td style={styles.phone}>{t.repaid_amount}</td>
 
                 <td>
-                  {t.balance}<br />
-                  
+                  {t.balance}
+                  <br />
                 </td>
 
                 <td>{t.disbursed_date}</td>
@@ -130,7 +138,9 @@ function AllLoans() {
                 <td>
                   <div style={styles.actions}>
                     <FaEye style={{ color: "#3498db", cursor: "pointer" }} />
-                    <FaComment style={{ color: "#f39c12", cursor: "pointer" }} />
+                    <FaComment
+                      style={{ color: "#f39c12", cursor: "pointer" }}
+                    />
                   </div>
                 </td>
               </tr>
@@ -153,12 +163,10 @@ function AllLoans() {
           <button>Next →</button>
         </div>
       </div>
-     
-      <AddCustomerModal addMember={addMember} />
+
+      <AddLoanModal />
     </div>
-    
   );
- 
 }
 
 export default AllLoans;

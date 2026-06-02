@@ -1,7 +1,7 @@
 import { usePayments } from "../hooks/usePayments";
 import { useAddMember } from "../hooks/useMembers";
 import { FaEye, FaComment, FaPlus, FaSearch } from "react-icons/fa";
-import AddCustomerModal from "../modals/customer/AddCustomerModal";
+import AddPaymentModal from "../modals/customer/AddPaymentModal";
 import { useState } from "react";
 
 function Payments() {
@@ -12,7 +12,7 @@ function Payments() {
  
 
   if (isPending) return <div style={styles.state}>Loading...</div>;
-  if (error) return <div style={styles.state}>Error loading active customers</div>;
+  if (error) return <div style={styles.state}>Error loading Payments</div>;
 
   return (
     <div style={styles.page}>
@@ -47,7 +47,7 @@ function Payments() {
         <button
         style={styles.addBtn}
         data-bs-toggle="modal"
-        data-bs-target="#addMemberModal">
+        data-bs-target="#addPaymentModal">
           <FaPlus /> ADD NEW
         </button>
       </div>
@@ -93,14 +93,14 @@ function Payments() {
             {payments?.map((p, index) => (
               <tr key={p.id} style={{ background: "#f9f9f9", borderBottom: "1px solid #ddd" }}>
                <td>{index + 1}</td>  
-                <td>{p.customer.first_name}</td>
+                <td>{p.customer_detail.first_name}</td>
 
                 <td>
                   {p.amount}
                 </td>
 
                 <td>
-                  {p.payment_method.name}
+                  {p.payment_method_detail.name}
                 </td>
 
                 <td>
@@ -111,16 +111,16 @@ function Payments() {
                 <td style={styles.phone}>{p.transaction_code}</td>
 
                 <td>
-                  {p.loan.code}<br />
+                  {p.loan_detail.code}<br />
                   
                 </td>
 
-                <td>{p.loan.balance}</td>
+                <td>{p.loan_detail.balance}</td>
 
-                <td>{p.loan.disbursed_date}</td>
+                <td>{p.loan_detail.disbursed_date}</td>
 
                 <td>
-                  <span style={styles.status}>{p.status.name}</span>
+                  <span style={styles.status}>{p.status_detail.name}</span>
                 </td>
 
                 <td>
@@ -150,7 +150,7 @@ function Payments() {
         </div>
       </div>
      
-      <AddCustomerModal addMember={addMember} />
+      <AddPaymentModal />
     </div>
     
   );

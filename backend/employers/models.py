@@ -1,5 +1,4 @@
 from decimal import Decimal
-
 from django.db import models
 from core.models import TimeStampedModel
 
@@ -24,13 +23,19 @@ class DeductionCycle(models.TextChoices):
 
 class Employer(TimeStampedModel):
     """
-    Represents a company/SACCO that guarantees employee credit usage.
+    Core Employer / Group / SACCO entity
     """
 
     name = models.CharField(max_length=255, unique=True)
     code = models.CharField(max_length=50, unique=True)
-    total_members = models.IntegerField(default=0)
-    total_loans = models.DecimalField(max_digits=12, decimal_places=2, default=0)
+
+    # Basic group info (matches your UI)
+    description = models.TextField(null=True, blank=True)
+    branch = models.CharField(max_length=100, null=True, blank=True)
+    chairman = models.CharField(max_length=255, null=True, blank=True)
+    contact_phone = models.CharField(max_length=20, null=True, blank=True)
+    paybill = models.CharField(max_length=50, null=True, blank=True)
+    account_number = models.CharField(max_length=50, null=True, blank=True)
 
     status = models.CharField(
         max_length=20,
@@ -53,25 +58,43 @@ class Employer(TimeStampedModel):
     max_exposure = models.DecimalField(
         max_digits=12,
         decimal_places=2,
-        help_text="Maximum total credit allowed across all employees"
-    )
-
-    contact_email = models.EmailField(null=True, blank=True)
-    contact_phone = models.CharField(max_length=20, null=True, blank=True)
-
-    # Current utilization (updated by transaction engine)
-    total_utilized = models.DecimalField(
-        max_digits=12,
-        decimal_places=2,
         default=0
     )
 
-    def available_exposure(self):
-        return (self.max_exposure or Decimal("0.00")) - (self.total_utilized or Decimal("0.00"))
+    contact_email = models.EmailField(null=True, blank=True)
 
-    def can_transact(self, amount):
-        amount = Decimal(amount)
-        return self.available_exposure() >= amount
+    def available_exposure(self):
+        return (self.max_exposure or Decimal("0.00"))
 
     def __str__(self):
         return f"{self.name} ({self.code})"
+
+class EmployerFinancialSnapshot(models.Model):
+    """
+    THIS POWERS UI DASHBOARD
+    """
+
+    employer = models.OneToOneField(
+        Employer,
+        on_delete=models.CASCADE,
+        related_name="financial"
+    )
+
+    total_members = models.IntegerField(default=0)
+
+    number_of_loans = models.IntegerField(default=0)
+
+    loan_total = models.DecimalField(max_digits=12, decimal_places=2, default=0)
+
+    outstanding_amount = models.DecimalField(max_digits=12, decimal_places=2, default=0)
+
+    overdue_amount = models.DecimalField(max_digits=12, decimal_places=2, default=0)
+
+    total_down_payments = models.DecimalField(max_digits=12, decimal_places=2, default=0)
+
+    total_savings = models.DecimalField(max_digits=12, decimal_places=2, default=0)
+
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"Financial - {self.employer.name}"

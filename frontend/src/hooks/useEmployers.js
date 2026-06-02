@@ -31,9 +31,6 @@ export const useAddEmployer = () => {
             mutationFn: addEmployer,
             onSuccess: () => {
                 queryClient.invalidateQueries({ queryKey: ["employers"] });
-            },
-            onError: (error) => {
-                console.error("Error adding employer:", error);
             }
         })
         return { addEmployer: mutate, error, isPending}

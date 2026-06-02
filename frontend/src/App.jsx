@@ -43,63 +43,63 @@ import Expenses from "./modules/accounting/Expenses";
 
 import CreditLimit from "./modules/custom/CreditLimit";
 
+import CustomerDetails from "./modules/members/viewdetails/CustomerDetails";
+
 export default function AppRoutes() {
   return (
     <BrowserRouter>
-    <Routes>
+      <Routes>
+        <Route path="/dashboard" element={<DashboardLayout />}>
+          <Route path="members/:national_id" element={<CustomerDetails />} />
+          <Route index element={<DashboardHome />} />
 
-      <Route path="/dashboard" element={<DashboardLayout />}>
+          <Route path="members" element={<Members />}>
+            <Route path="active" element={<Active />} />
+            <Route path="leads" element={<Leads />} />
+            <Route path="groups" element={<Groups />} />
+            <Route path="scoring" element={<Scoring />} />
+          </Route>
 
-        <Route index element={<DashboardHome />} />
+          <Route path="crm" element={<Crm />} />
+          <Route path="loans" element={<Loans />}>
+            <Route path="all" element={<AllLoans />} />
+            <Route path="defaulters" element={<Defaulters />} />
+            <Route path="installments" element={<Installments />} />
+            <Route path="falling-due" element={<FallingDue />} />
+            <Route path="approvals" element={<Approvals />} />
+            <Route path="products" element={<LoanProducts />} />
+          </Route>
+          <Route path="payments" element={<Payments />} />
 
-        <Route path="members" element={<Members />} >
-          <Route path="active" element={<Active />} />
-          <Route path="leads" element={<Leads/>} />
-          <Route path="groups" element={<Groups/>} />
-          <Route path="scoring" element={<Scoring/>} />
+          <Route path="org" element={<Organizations />}>
+            <Route path="staff" element={<Staff />} />
+            <Route path="branches" element={<Branches />} />
+          </Route>
+
+          <Route path="reports" element={<Reports />}>
+            <Route path="all" element={<AllReports />} />
+            <Route path="allocations" element={<Allocations />} />
+            <Route path="analytics" element={<Analytics />} />
+            <Route path="profile" element={<Profile />} />
+          </Route>
+
+          <Route path="accounting" element={<Accounting />}>
+            <Route path="income-statement" element={<IncomeStatement />} />
+            <Route path="balance-sheet" element={<BalanceSheet />} />
+            <Route path="defaulter-ageing" element={<DefaulterAgeing />} />
+            <Route path="trial-balance" element={<TrialBalance />} />
+            <Route path="audit" element={<Audit />} />
+            <Route path="expenses" element={<Expenses />} />
+          </Route>
+
+          <Route path="custom" element={<Custom />}>
+            <Route path="credit-limits" element={<CreditLimit />} />
+          </Route>
+
+          <Route path="settings" element={<Settings />} />
         </Route>
-
-        <Route path="crm" element={<Crm />} />
-        <Route path="loans" element={<Loans />}>
-          <Route path="all" element={<AllLoans />} />
-          <Route path="defaulters" element={<Defaulters />} />
-          <Route path="installments" element={<Installments />} />
-          <Route path="falling-due" element={<FallingDue />} />
-          <Route path="approvals" element={<Approvals />} />
-          <Route path="products" element={<LoanProducts />} />
-        </Route>
-        <Route path="payments" element={<Payments />} />
-
-        <Route path="org" element={<Organizations />} >
-          <Route path="staff" element={<Staff />} />
-          <Route path="branches" element={<Branches />} />
-        </Route>
-
-        <Route path="reports" element={<Reports />}>
-          <Route path="all" element={<AllReports />} />
-          <Route path="allocations" element={<Allocations />} />
-          <Route path="analytics" element={<Analytics />} />
-          <Route path="profile" element={<Profile />} />
-        </Route>
-
-        <Route path="accounting" element={<Accounting />}>
-          <Route path="income-statement" element={<IncomeStatement />} />
-          <Route path="balance-sheet" element={<BalanceSheet />} />
-          <Route path="defaulter-ageing" element={<DefaulterAgeing />} />
-          <Route path="trial-balance" element={<TrialBalance />} />
-          <Route path="audit" element={<Audit />} />
-          <Route path="expenses" element={<Expenses />} />
-        </Route>
-
-        <Route path="custom" element={<Custom />} >
-          <Route path="credit-limits" element={<CreditLimit />} />
-        </Route>
-
-        <Route path="settings" element={<Settings />} />
-      </Route>
-      <Route path="/" element={<Login />} />
-
-    </Routes>
+        <Route path="/" element={<Login />} />
+      </Routes>
     </BrowserRouter>
   );
 }

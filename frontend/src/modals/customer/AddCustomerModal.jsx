@@ -3,7 +3,8 @@ import { useMutation } from "@tanstack/react-query";
 import api from "../../api";
 
 export default function AddCustomerModal({ addMember, onClose }) {
-  
+  const [successMsg, setSuccessMsg] = useState("");
+  const [errorMsg, setErrorMsg] = useState("");
 
   const [formData, setFormData] = useState({
     first_name: "",
@@ -19,7 +20,6 @@ export default function AddCustomerModal({ addMember, onClose }) {
     status: "LEAD",
   });
 
-
   const handleChange = (e) => {
     setFormData({
       ...formData,
@@ -32,32 +32,50 @@ export default function AddCustomerModal({ addMember, onClose }) {
     console.log("form", formData);
     addMember(formData, {
       onSuccess: () => {
-        alert("Member added successfully!");
+        setSuccessMsg("Member added successfully!");
         // onClose();
-        document.getElementById("closeMemberModal").click();
+        setTimeout(() => {
+          document.getElementById("closeMemberModal").click();
+          setSuccessMsg("");
+        }, 2000);
       },
-      onError: () => {
-        console.log(e)
-        alert("Failed to add member. Please try again.");
+      onError: (error) => {
+        const data = error?.response?.data;
+        console.log("error", data);
+
+        const msg = data
+          ? Object.values(data).flat().join(", ")
+          : error?.message || "Unknown error";
+        setSuccessMsg("");
+        setErrorMsg(msg);
+        setTimeout(() => {
+          setErrorMsg("");
+        }, 3000);
       },
     });
-  }
-
-
+  };
 
   return (
     <>
-
       <div
         className="modal fade"
         id="addMemberModal"
         tabIndex="-1"
         aria-hidden="true"
         role="dialog"
-      >
-        <div className="modal-dialog modal-lg">
-          <div className="modal-content">
 
+        //   style={{
+        //   position: "fixed",
+        //   inset: 0,
+        //   backgroundColor: "rgba(0,0,0,0.5)",
+        //   display: "flex",
+        //   justifyContent: "center",
+        //   alignItems: "center",
+        //   zIndex: 1000,
+        // }}
+      >
+        <div className="modal-dialog modal-lg modal-dialog-scrollable">
+          <div className="modal-content">
             <div className="modal-header">
               <h5 className="modal-title">Add Member</h5>
 
@@ -70,10 +88,22 @@ export default function AddCustomerModal({ addMember, onClose }) {
             </div>
 
             <form onSubmit={handleSubmit}>
-              <div className="modal-body">
-
+              {successMsg && (
+                <div className="alert alert-success mx-3 mt-3">
+                  {successMsg}
+                </div>
+              )}
+              {errorMsg && (
+                <div className="alert alert-danger mx-3 mt-3">{errorMsg}</div>
+              )}
+              <div
+                className="modal-body"
+                style={{
+                  maxHeight: "70vh",
+                  overflowY: "auto",
+                }}
+              >
                 <div className="row">
-
                   <div className="col-md-6 mb-3">
                     <label className="form-label">First Name</label>
                     <input
@@ -190,9 +220,7 @@ export default function AddCustomerModal({ addMember, onClose }) {
                   </div>
 
                   <div className="col-md-12 mb-3">
-                    <label className="form-label">
-                      Physical Address
-                    </label>
+                    <label className="form-label">Physical Address</label>
                     <textarea
                       name="physical_address"
                       className="form-control"
@@ -215,11 +243,7 @@ export default function AddCustomerModal({ addMember, onClose }) {
                       <option value="BLOCKED">Blocked</option>
                     </select>
                   </div>
-
                 </div>
-
-                
-
               </div>
 
               <div className="modal-footer">
@@ -232,17 +256,11 @@ export default function AddCustomerModal({ addMember, onClose }) {
                   Close
                 </button>
 
-                <button
-                  type="submit"
-                  className="btn btn-primary"
-                 
-                >
+                <button type="submit" className="btn btn-primary">
                   Save Member
                 </button>
               </div>
-
             </form>
-
           </div>
         </div>
       </div>

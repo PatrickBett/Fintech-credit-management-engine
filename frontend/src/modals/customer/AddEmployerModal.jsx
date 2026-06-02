@@ -21,8 +21,10 @@ export default function AddEmployerModal({ addEmployer, isPending }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    console.log("data to submit", formData);
     addEmployer(formData);
     alert("Employer added successfully");
+    
     setFormData({
       name: "",
       code: "",
@@ -33,6 +35,7 @@ export default function AddEmployerModal({ addEmployer, isPending }) {
       contact_email: "",
       contact_phone: "",
     });
+    document.getElementById("closeEmployerModal").click();
   };
 
   return (
@@ -183,6 +186,7 @@ export default function AddEmployerModal({ addEmployer, isPending }) {
             <div className="modal-footer">
               <button
                 type="button"
+                id="closeEmployerModal"
                 className="btn btn-secondary"
                 data-bs-dismiss="modal"
               >

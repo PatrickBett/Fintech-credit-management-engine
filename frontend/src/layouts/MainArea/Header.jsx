@@ -5,7 +5,7 @@ export default function Header({ toggleSidebar }) {
     <div
       style={{
         height: "60px",
-        backgroundColor: "#ffffff",
+        backgroundColor: "#2c3e50",
         borderBottom: "1px solid #e2e8f0",
         display: "flex",
         alignItems: "center",
@@ -25,6 +25,7 @@ export default function Header({ toggleSidebar }) {
           style={{
             cursor: "pointer",
             fontSize: "18px",
+            color: "#ecf0f1"
           }}
         />
 
@@ -33,6 +34,7 @@ export default function Header({ toggleSidebar }) {
             margin: 0,
             fontSize: "16px",
             fontWeight: "600",
+            color: "#ecf0f1"
           }}
         >
           Dashboard
@@ -49,7 +51,7 @@ export default function Header({ toggleSidebar }) {
         <span
           style={{
             fontSize: "14px",
-            color: "#64748b",
+            color: "#ecf0f1",
           }}
         >
           Admin
