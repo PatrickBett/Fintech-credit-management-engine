@@ -1,4 +1,4 @@
-from .models import Customer, Product,  CreditProfile, CustomerKYC
+from .models import Customer, Product,  CreditProfile, CustomerKYC, Referee
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
 
@@ -31,4 +31,8 @@ class CreditProfileSerializer(serializers.ModelSerializer):
 class CustomerKYCSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomerKYC
+        fields = "__all__"
+class RefereeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Referee
         fields = "__all__"

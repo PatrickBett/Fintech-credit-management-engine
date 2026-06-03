@@ -1,8 +1,9 @@
 from django.contrib import admin
-from .models import Product, Customer, AuditLog, CreditProfile, CustomerKYC
+from .models import Product, Customer, AuditLog, CreditProfile, CustomerKYC, Referee
 # Register your models here.
 admin.site.register(Product)
 admin.site.register(Customer)
 admin.site.register(AuditLog)
 admin.site.register(CreditProfile)
 admin.site.register(CustomerKYC)
+admin.site.register(Referee)

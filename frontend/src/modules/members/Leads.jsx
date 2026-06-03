@@ -3,12 +3,13 @@ import { useAddMember } from "../../hooks/useMembers";
 import { FaEye, FaComment, FaPlus, FaSearch } from "react-icons/fa";
 import AddCustomerModal from "../../modals/customer/AddCustomerModal";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 function Leads() {
- 
+  const navigate = useNavigate();
   const { members, isPending, error } = useMembers();
-   const { addMember } = useAddMember();
-  const leadMembers = members.filter(m => m.status === "LEAD");
+  const { addMember } = useAddMember();
+  const leadMembers = members.filter((m) => m.status === "LEAD");
 
   if (isPending) return <div style={styles.state}>Loading...</div>;
   if (error) return <div style={styles.state}>Error loading leads</div>;
@@ -17,11 +18,11 @@ function Leads() {
     <div style={styles.page}>
       {/* HEADER */}
       <div style={styles.header}>
-        <h2>Leads <span style={styles.subTitle}>List</span></h2>
+        <h2>
+          Leads <span style={styles.subTitle}>List</span>
+        </h2>
 
-        <div style={styles.breadcrumb}>
-          Home &gt; Customer
-        </div>
+        <div style={styles.breadcrumb}>Home &gt; Customer</div>
       </div>
 
       {/* TOOLBAR */}
@@ -44,9 +45,10 @@ function Leads() {
         </select>
 
         <button
-        style={styles.addBtn}
-        data-bs-toggle="modal"
-        data-bs-target="#addMemberModal">
+          style={styles.addBtn}
+          data-bs-toggle="modal"
+          data-bs-target="#addMemberModal"
+        >
           <FaPlus /> ADD NEW
         </button>
       </div>
@@ -71,7 +73,10 @@ function Leads() {
 
       {/* TABLE */}
       <div style={styles.tableWrapper}>
-        <table style={styles.table} className="table table-striped table-responsive table-bordered">
+        <table
+          style={styles.table}
+          className="table table-striped table-responsive table-bordered"
+        >
           <thead>
             <tr>
               <th>ID</th>
@@ -90,8 +95,14 @@ function Leads() {
 
           <tbody>
             {leadMembers?.map((m, index) => (
-              <tr key={m.uid} style={{ background: "#f9f9f9", borderBottom: "1px solid #ddd" }}>
-               <td>{index + 1}</td>  
+              <tr
+                key={m.uid}
+                style={{
+                  background: "#f9f9f9",
+                  borderBottom: "1px solid #ddd",
+                }}
+              >
+                <td>{index + 1}</td>
                 <td>{m.national_id}</td>
 
                 <td>
@@ -115,7 +126,8 @@ function Leads() {
                 <td style={styles.phone}>{m.primary_mobile}</td>
 
                 <td>
-                  HQ<br />
+                  HQ
+                  <br />
                   <small>Prod: CurePlus</small>
                 </td>
 
@@ -129,8 +141,15 @@ function Leads() {
 
                 <td>
                   <div style={styles.actions}>
-                    <FaEye style={{ color: "#3498db", cursor: "pointer" }} />
-                    <FaComment style={{ color: "#f39c12", cursor: "pointer" }} />
+                    <FaEye
+                      style={{ color: "#3498db", cursor: "pointer" }}
+                      onClick={() =>
+                        navigate(`/dashboard/members/${m.national_id}`)
+                      }
+                    />
+                    <FaComment
+                      style={{ color: "#f39c12", cursor: "pointer" }}
+                    />
                   </div>
                 </td>
               </tr>
@@ -153,12 +172,10 @@ function Leads() {
           <button>Next →</button>
         </div>
       </div>
-     
+
       <AddCustomerModal addMember={addMember} />
     </div>
-    
   );
- 
 }
 
 export default Leads;

@@ -37,3 +37,42 @@ export const useAddMember = () => {
      });
     return { addMember: mutate,isPending, error };
 }
+
+//fetch referees
+export const useReferees = () =>{
+    const fetchReferees = async() =>{
+        const response = await api.get("http://127.0.0.1:8000/api/members/referees/")
+        const data = response.data
+        return data;
+    }
+    const { data=[], error, isPending } = useQuery({
+        queryKey: ['referees'],
+        queryFn: fetchReferees,
+        staleTime: 5 * 60 * 1000, // 5 minutes
+    })
+    return { referees: data, isPending, error }
+}
+// add/post referee
+export const useAddReferee = () => {
+    const queryClient = useQueryClient();
+    const addReferee = async (refereeData) => {
+        try {
+            const res = await api.post("http://127.0.0.1:8000/api/members/referees/", refereeData);
+        const data = await res.data;
+        console.log('Referee added:', data);
+        return data;
+        }
+        catch (error) {
+            console.error('Error adding referee:', error);
+            console.log("Response:", error.response?.data);
+        }
+    }
+
+    const { mutate, isPending, error } = useMutation({
+        mutationFn: addReferee,
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['referees'] });
+        }
+    });
+    return { addReferee: mutate, isPending, error };
+}

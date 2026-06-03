@@ -99,6 +99,16 @@ class CustomerKYC(models.Model):
     def __str__(self):
         return f"KYC - {self.customer.first_name}"
 
+class Referee(models.Model):
+    customer = models.ForeignKey(Customer, on_delete=models.CASCADE, null=True, blank=True)
+    name = models.CharField(max_length=100)
+    mobile_no = models.CharField(max_length=50, unique=False)
+    address = models.CharField(max_length=50, unique=False)
+    relationship = models.CharField(max_length=50, unique=False)
+
+    def __str__(self):
+        return self.name
+
 class AuditLog(models.Model):
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
 
