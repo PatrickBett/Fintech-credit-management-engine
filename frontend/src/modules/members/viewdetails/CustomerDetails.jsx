@@ -4,8 +4,12 @@ import { useMembers, useReferees } from "../../../hooks/useMembers";
 import { useTransactions } from "../../../hooks/useTransactions";
 import { usePayments } from "../../../hooks/usePayments";
 import { FaLock } from "react-icons/fa";
+import { FaPencilAlt } from "react-icons/fa";
 import EditMemberModal from "../../../modals/customer/EditMemberModal";
 import AddRefereeModal from "../../../modals/customer/AddRefereeModal";
+import ConfirmModal from "../../../modals/customer/ConfirmModal";
+import EditStatusModal from "../../../modals/customer/EditStatusModal";
+
 
 function CustomerDetails() {
   const { national_id } = useParams();
@@ -14,6 +18,7 @@ function CustomerDetails() {
   const { transactions } = useTransactions();
   const { payments } = usePayments();
   const [selectedMember, setSelectedMember] = useState(null);
+  const [status, setStatus] = useState('')
   const [activeTab, setActiveTab] = useState("Bio Info");
   console.log("Referees", referees);
   if (!referees) return <div className="p-3">Loading...</div>;
@@ -146,7 +151,11 @@ function CustomerDetails() {
                     </tr>
                     <tr>
                       <th>Date Added</th>
-                      <td>{customer.dob || "-"}</td>
+                      <td>
+                        <small>
+                          {new Date(customer.created_at).toLocaleTimeString()}
+                        </small>
+                      </td>
                     </tr>
                     <tr>
                       <th>Branch</th>
@@ -159,6 +168,10 @@ function CustomerDetails() {
                     <tr>
                       <th>Total Loans</th>
                       <td>{customer.dob || "-"}</td>
+                    </tr>
+                    <tr>
+                      <th>KRA Pin</th>
+                      <td>{customer.customerkyc_details?.kra_pin || "-"}</td>
                     </tr>
 
                     <tr>
@@ -254,7 +267,7 @@ function CustomerDetails() {
                     </thead>
 
                     <tbody>
-                      {customerPayments.length > 0 ? (
+                      {customerPayments?.length > 0 ? (
                         customerPayments.map((p) => (
                           <tr key={p.id}>
                             <td>{p.created_at || "-"}</td>
@@ -308,18 +321,26 @@ function CustomerDetails() {
                     </thead>
 
                     <tbody>
-                      {customerLoans.map((t) => (
-                        <tr key={t.id}>
-                          <td>{t.code}</td>
-                          <td>{t.principal}</td>
-                          <td>{t.balance}</td>
-                          <td>
-                            <span className="badge bg-info">
-                              {t.status?.name}
-                            </span>
+                      {customerLoans?.length > 0 ? (
+                        customerLoans.map((t) => (
+                          <tr key={t.id}>
+                            <td>{t.code}</td>
+                            <td>{t.principal}</td>
+                            <td>{t.balance}</td>
+                            <td>
+                              <span className="badge bg-info">
+                                {t.status?.name}
+                              </span>
+                            </td>
+                          </tr>
+                        ))
+                      ) : (
+                        <tr>
+                          <td colSpan="4" className="text-center text-muted">
+                            No loans found
                           </td>
                         </tr>
-                      ))}
+                      )}
                     </tbody>
                   </table>
                 </div>
@@ -354,7 +375,7 @@ function CustomerDetails() {
                     </thead>
 
                     <tbody>
-                      {customerReferees.length > 0 ? (
+                      {customerReferees?.length > 0 ? (
                         customerReferees.map((r) => (
                           <tr key={r.id}>
                             <td>{r.name}</td>
@@ -403,18 +424,29 @@ function CustomerDetails() {
                     </thead>
 
                     <tbody>
-                      {customerLoans.map((t) => (
-                        <tr key={t.id}>
-                          <td>{t.code}</td>
-                          <td>{t.principal}</td>
-                          <td>{t.balance}</td>
-                          <td>
-                            <span className="badge bg-info">
-                              {t.status?.name}
-                            </span>
+                      {customerLoans.length > 0 ? (
+                        customerLoans.map((t) => (
+                          <tr key={t.id}>
+                            <td>{t.code}</td>
+                            <td>{t.principal}</td>
+                            <td>{t.balance}</td>
+                            <td>
+                              <span className="badge bg-info">
+                                {t.status?.name}
+                              </span>
+                            </td>
+                          </tr>
+                        ))
+                      ) : (
+                        <tr>
+                          <td
+                            colSpan="4"
+                            className="text-center text-muted py-4"
+                          >
+                            Loans Not Found
                           </td>
                         </tr>
-                      ))}
+                      )}
                     </tbody>
                   </table>
                 </div>
@@ -588,9 +620,11 @@ function CustomerDetails() {
                 ✏️ Update Profile
               </button>
 
-              <button className="btn btn-success w-100 mb-2">
-                ➕ Give a Loan
-              </button>
+              {customer.status === "ACTIVE" && (
+                <button className="btn btn-success w-100 mb-2">
+                  ➕ Give a Loan
+                </button>
+              )}
 
               <button className="btn btn-dark w-100 mb-2">
                 ⚡ Update Limit
@@ -600,11 +634,34 @@ function CustomerDetails() {
                 💬 Interactions
               </button>
 
-              <select className="form-select mb-2">
+              <button
+                type="button"
+                className={`d-flex align-items-center justify-content-center gap-2 border-0 px-3 py-1 w-100 mb-2 ${
+                  customer.status === "ACTIVE"
+                    ? "bg-success"
+                    : customer.status === "LEAD"
+                      ? "bg-warning"
+                      : "bg-danger"
+                }`}
+                data-bs-toggle="modal"
+                data-bs-target="#editStatusModal"
+                onClick={() => {
+                  setSelectedMember(customer);
+                  setStatus(customer.status);
+                }}
+              >
+                <span className="text-white fw-semibold">
+                  {customer.status}
+                </span>
+
+                <FaPencilAlt size={12} color="white" />
+              </button>
+
+              {/* <select className="form-select mb-2">
                 <option>ACTIVE</option>
                 <option>LEAD</option>
                 <option>BLOCKED</option>
-              </select>
+              </select> */}
 
               <button
                 className="btn w-100 mb-2"
@@ -622,6 +679,11 @@ function CustomerDetails() {
       </div>
       <EditMemberModal member={selectedMember} />
       <AddRefereeModal customerId={selectedMember?.uid} />
+      <EditStatusModal
+        status={status}
+        setStatus={setStatus}
+        customerId={selectedMember?.uid}
+      />
     </div>
   );
 }

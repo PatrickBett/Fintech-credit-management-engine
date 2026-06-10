@@ -6,11 +6,90 @@ function DashboardHome() {
   const { members } = useMembers();
   const { employers } = useEmployers();
 
+  const BRAND_GREEN = "#009A44";
+  const BRAND_RED = "#E4002B";
+  const DARK = "#111827";
+
+  const styles = {
+    page: {
+      background: "#f4f6fb",
+      minHeight: "100vh",
+      padding: "24px",
+      fontFamily: "Arial, sans-serif",
+    },
+
+    header: {
+      marginBottom: "24px",
+    },
+
+    title: {
+      fontSize: "24px",
+      fontWeight: 700,
+      margin: 0,
+      color: DARK,
+    },
+
+    subtitle: {
+      marginTop: "6px",
+      color: "#6b7280",
+    },
+
+    kpiCard: (bgColor, color) => ({
+      background: bgColor,
+      borderRadius: "16px",
+      padding: "18px",
+      boxShadow: "0 10px 20px rgba(0,0,0,0.08)",
+      color: color,
+      position: "relative",
+      overflow: "hidden",
+    }),
+
+    kpiLabel: {
+      fontSize: "13px",
+      margin: 0,
+      opacity: 0.9,
+    },
+
+    kpiValue: {
+      fontSize: "30px",
+      fontWeight: 700,
+      marginTop: "10px",
+    },
+
+    sectionCard: {
+      background: "#fff",
+      borderRadius: "16px",
+      padding: "18px",
+      border: "1px solid #e6e8f0",
+      boxShadow: "0 8px 20px rgba(0,0,0,0.05)",
+    },
+  };
+
   const stats = [
-    { label: "Total Customers", value: members.length.toString(), change: "+12%", color: "#1d4ed8" },
-    { label: "Active Loans", value: "342", change: "+5%", color: "#16a34a" },
-    { label: "Pending Approvals", value: "28", change: "-3%", color: "#f59e0b" },
-    { label: "Total Revenue", value: "$54,230", change: "+18%", color: "#9333ea" },
+    {
+      label: "Total Customers",
+      value: members.length,
+      bg: BRAND_GREEN,
+      color: "#fff",
+    },
+    {
+      label: "Employers / SACCOs",
+      value: employers.length,
+      bg: "#111827",
+      color: "#fff",
+    },
+    {
+      label: "Active Loans",
+      value: 342,
+      bg: "#ffffff",
+      color: "#111827",
+    },
+    {
+      label: "Pending Approvals",
+      value: 28,
+      bg: BRAND_RED,
+      color: "#fff",
+    },
   ];
 
   const activities = [
@@ -20,94 +99,79 @@ function DashboardHome() {
     { text: "Loan approved for Michael", time: "1 hour ago" },
   ];
 
-  const cardStyle = {
-    background: "white",
-    borderRadius: "12px",
-    padding: "16px",
-    boxShadow: "0 2px 10px rgba(0,0,0,0.05)",
-    border: "1px solid #e5e7eb",
-  };
-
   return (
-    <div style={{ padding: "20px" }}>
-
+    <div style={styles.page}>
       {/* HEADER */}
-      <div style={{ marginBottom: "20px" }}>
-        <h2 style={{ margin: 0 }}>Dashboard Overview</h2>
-        <p style={{ color: "#6b7280", marginTop: "5px" }}>
-          Welcome back — here is your cureplus summary
-        </p>
+      <div style={styles.header}>
+        <h2 style={styles.title}>Dashboard Overview</h2>
+        <p style={styles.subtitle}>CurePlus fintech system performance</p>
       </div>
 
-      {/* STATS GRID */}
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
-          gap: "16px",
-          marginBottom: "20px",
-        }}
-      >
-        {stats.map((item, index) => (
-          <div key={index} style={cardStyle}>
-            <p style={{ color: "#6b7280", margin: 0 }}>{item.label}</p>
-            <h3 style={{ margin: "8px 0", fontSize: "24px" }}>{item.value}</h3>
-            <span style={{ color: item.color, fontSize: "13px" }}>
-              {item.change} this month
-            </span>
-          </div>
-        ))}
-      </div>
+      {/* KPI SECTION */}
+      <div className="container-fluid">
+        <div className="row g-3">
+          {stats.map((s, i) => (
+            <div className="col-md-3" key={i}>
+              <div style={styles.kpiCard(s.bg, s.color)}>
+                <p style={styles.kpiLabel}>{s.label}</p>
 
-      {/* MAIN CONTENT */}
-      <div style={{ display: "grid", gridTemplateColumns: "2fr 1fr", gap: "16px" }}>
-
-        {/* ACTIVITY FEED */}
-        <div style={cardStyle}>
-          <h3 style={{ marginBottom: "12px" }}>Recent Activity</h3>
-
-          {activities.map((a, i) => (
-            <div
-              key={i}
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-                padding: "10px 0",
-                borderBottom: "1px solid #f1f5f9",
-              }}
-            >
-              <span style={{ fontSize: "14px" }}>{a.text}</span>
-              <span style={{ fontSize: "12px", color: "#94a3b8" }}>
-                {a.time}
-              </span>
+                <h3 style={styles.kpiValue}>{s.value}</h3>
+              </div>
             </div>
           ))}
         </div>
+      </div>
 
-        {/* SUMMARY PANEL */}
-        <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
+      <br />
 
-          <div style={cardStyle}>
-            <h4>Loan Performance</h4>
-            <p style={{ color: "#6b7280", fontSize: "13px" }}>
-              87% repayment rate this month
-            </p>
+      {/* MAIN CONTENT */}
+      <div className="container-fluid">
+        <div className="row g-3">
+          {/* LEFT */}
+          <div className="col-md-8">
+            <div style={styles.sectionCard}>
+              <h5>Recent Activity</h5>
+
+              {activities.map((a, i) => (
+                <div
+                  key={i}
+                  style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    padding: "12px 0",
+                    borderBottom: "1px solid #f1f3f9",
+                  }}
+                >
+                  <span>{a.text}</span>
+                  <span style={{ fontSize: "12px", color: "#6b7280" }}>
+                    {a.time}
+                  </span>
+                </div>
+              ))}
+            </div>
           </div>
 
-          <div style={cardStyle}>
-            <h4>System Health</h4>
-            <p style={{ color: "#16a34a", fontSize: "13px" }}>
-              All systems operational
-            </p>
-          </div>
+          {/* RIGHT */}
+          <div className="col-md-4">
+            <div style={{ ...styles.sectionCard, marginBottom: "12px" }}>
+              <h6>System Status</h6>
+              <span style={{ color: BRAND_GREEN, fontWeight: 600 }}>
+                Operational
+              </span>
+            </div>
 
-          <div style={cardStyle}>
-            <h4>Pending Tasks</h4>
-            <p style={{ color: "#f59e0b", fontSize: "13px" }}>
-              12 approvals waiting
-            </p>
-          </div>
+            <div style={{ ...styles.sectionCard, marginBottom: "12px" }}>
+              <h6>Loan Health</h6>
+              <p style={{ margin: 0, color: "#6b7280" }}>87% repayment rate</p>
+            </div>
 
+            <div style={styles.sectionCard}>
+              <h6>Pending Tasks</h6>
+              <span style={{ color: BRAND_RED, fontWeight: 600 }}>
+                12 approvals
+              </span>
+            </div>
+          </div>
         </div>
       </div>
     </div>

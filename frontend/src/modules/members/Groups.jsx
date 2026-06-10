@@ -77,10 +77,10 @@ function Groups() {
               <tr key={e.id} style={{ background: "#f9f9f9", borderBottom: "1px solid #ddd" }}>
                 <td>{index + 1}</td>
                 <td>{e.name}</td>
-                <td>{e.total_members}</td>
+                <td>{e.financial.total_members}</td>
                 <td>{e.max_exposure}</td>
                 <td>{e.risk_tier}</td>
-                <td>{e.total_loans}</td>
+                <td>{e.financial.loan_total}</td>
                 <td>{e.branch}--</td>
                 <td>
                   <span style={styles.status}>{e.status}</span>

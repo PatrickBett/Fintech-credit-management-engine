@@ -23,6 +23,30 @@ class CustomerListCreateView(APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+class CustomerStatusUpdateView(APIView):
+    def patch(self, request, pk):
+        try:
+            customer = Customer.objects.get(pk=pk)
+        except Customer.DoesNotExist:
+            return Response(
+                {"detail": "Customer not found"},
+                status=status.HTTP_404_NOT_FOUND
+            )
+
+        new_status = request.data.get("status")
+
+        if new_status not in ["LEAD", "ACTIVE", "BLOCKED"]:
+            return Response(
+                {"detail": "Invalid status"},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        customer.status = new_status
+        customer.save()
+
+        serializer = CustomerSerializer(customer)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
 class ProductListCreateView(APIView):
     def get(self, request):
         products = Product.objects.all()

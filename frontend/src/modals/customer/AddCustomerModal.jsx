@@ -1,8 +1,10 @@
 import { useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import api from "../../api";
+import { useEmployers } from "../../hooks/useEmployers";
 
 export default function AddCustomerModal({ addMember, onClose }) {
+  const { employers } = useEmployers();
   const [successMsg, setSuccessMsg] = useState("");
   const [errorMsg, setErrorMsg] = useState("");
 
@@ -139,7 +141,7 @@ export default function AddCustomerModal({ addMember, onClose }) {
                     />
                   </div>
 
-                  {/* <div className="col-md-6 mb-3">
+                  <div className="col-md-6 mb-3">
                     <label className="form-label">Employer</label>
                     <select
                       name="employer"
@@ -150,15 +152,12 @@ export default function AddCustomerModal({ addMember, onClose }) {
                       <option value="">Select Employer</option>
 
                       {employers.map((employer) => (
-                        <option
-                          key={employer.id}
-                          value={employer.id}
-                        >
+                        <option key={employer.id} value={employer.id}>
                           {employer.name}
                         </option>
                       ))}
                     </select>
-                  </div> */}
+                  </div>
 
                   <div className="col-md-6 mb-3">
                     <label className="form-label">Gender</label>
@@ -185,7 +184,7 @@ export default function AddCustomerModal({ addMember, onClose }) {
                   </div>
 
                   <div className="col-md-6 mb-3">
-                    <label className="form-label">Net Salary</label>
+                    <label className="form-label">Limit</label>
                     <input
                       type="number"
                       step="0.01"

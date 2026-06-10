@@ -26,27 +26,25 @@ function AddRefereeModal({ customerId }) {
       ...formData,
       customer: customerId,
     };
-    console.log("Submitting payload:", payload);
     addReferee(payload, {
       onSuccess: () => {
         setSuccessMsg("Referee added successfully");
         setTimeout(() => {
-          document.getElementById("addRefereeModal").click();
+          document.getElementById("closeRefereeModal").click();
+          setSuccessMsg("");
         }, 2000);
       },
-        onError: (error) => {
-            const data = error?.response?.data;
-            console.log("Error adding referee:", data);
-            setError(data?.detail || "An error occurred while adding the referee");
-        }
-    });
+      onError: (error) => {
+        // console.log("Error adding referee:", data);
 
-    // setFormData({
-    //   name: "",
-    //   mobile_no: "",
-    //   address: "",
-    //   relationship: "",
-    // });
+        setSuccessMsg("");
+        setError(error || "An error occurred while adding the referee");
+        setTimeout(() => {
+          setError("");
+        }, 3000);
+        // setError(data || "An error occurred while adding the referee");
+      },
+    });
   };
 
   return (
@@ -80,7 +78,7 @@ function AddRefereeModal({ customerId }) {
             )}
             {error && (
               <div className="alert alert-danger m-3" role="alert">
-                {error}
+                {JSON.stringify(error.response?.data)}
               </div>
             )}
             <div className="modal-body">
@@ -141,6 +139,7 @@ function AddRefereeModal({ customerId }) {
                 type="button"
                 className="btn btn-secondary"
                 data-bs-dismiss="modal"
+                id="closeRefereeModal"
               >
                 Cancel
               </button>

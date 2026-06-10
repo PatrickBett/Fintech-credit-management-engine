@@ -34,8 +34,6 @@ class Employer(TimeStampedModel):
     branch = models.CharField(max_length=100, null=True, blank=True)
     chairman = models.CharField(max_length=255, null=True, blank=True)
     contact_phone = models.CharField(max_length=20, null=True, blank=True)
-    paybill = models.CharField(max_length=50, null=True, blank=True)
-    account_number = models.CharField(max_length=50, null=True, blank=True)
 
     status = models.CharField(
         max_length=20,
