@@ -73,176 +73,169 @@ function EditMemberModal({ member, onSuccess }) {
       aria-hidden="true"
     >
       <div className="modal-dialog modal-xl modal-dialog-scrollable">
-        <div className="modal-content">
+        <div className="modal-content border-0 shadow-lg rounded-4">
           {/* HEADER */}
-          <div className="modal-header">
-            <h5 className="modal-title">Customer Profile</h5>
+          <div
+            className="modal-header text-white"
+            style={{ background: "#009A44" }} // CurePlus GREEN
+          >
+            <h5 className="modal-title fw-semibold">Customer Profile</h5>
 
             <button
               type="button"
-              className="btn-close"
+              className="btn-close btn-close-white"
               data-bs-dismiss="modal"
             />
           </div>
 
-          {/* NAVIGATION */}
-          <div className="px-3 pt-3 border-bottom">
-            <ul className="nav nav-pills">
-              <li className="nav-item">
-                <button
-                  className={`nav-link ${activeTab === "profile" ? "active" : ""}`}
-                  onClick={() => setActiveTab("profile")}
-                >
-                  Profile
-                </button>
-              </li>
-
-              <li className="nav-item">
-                <button
-                  className={`nav-link ${activeTab === "loans" ? "active" : ""}`}
-                  onClick={() => setActiveTab("loans")}
-                >
-                  Loans
-                </button>
-              </li>
-
-              <li className="nav-item">
-                <button
-                  className={`nav-link ${activeTab === "financial" ? "active" : ""}`}
-                  onClick={() => setActiveTab("financial")}
-                >
-                  Financial
-                </button>
-              </li>
-            </ul>
+          {/* TABS */}
+          <div
+            className="px-4 pt-3 border-bottom"
+            style={{ background: "#f5f7fb" }}
+          >
+            
           </div>
 
           {/* BODY */}
-          <div className="modal-body">
-            {/* ================= PROFILE TAB ================= */}
+          <div className="modal-body p-4" style={{ background: "#f5f7fb" }}>
+            {/* ================= PROFILE ================= */}
             {activeTab === "profile" && (
               <form onSubmit={handleSubmit}>
-                <div className="row g-3">
-                  <div className="col-md-6">
-                    <label className="form-label">First Name</label>
-                    <input
-                      name="first_name"
-                      className="form-control"
-                      value={formData.first_name}
-                      onChange={handleChange}
-                    />
-                  </div>
+                <div className="row g-4">
+                  {[
+                    ["First Name", "first_name"],
+                    ["Last Name", "last_name"],
+                    ["National ID", "national_id"],
+                    ["Phone", "primary_mobile"],
+                  ].map(([label, name]) => (
+                    <div className="col-md-6" key={name}>
+                      <label className="form-label fw-semibold">{label}</label>
 
-                  <div className="col-md-6">
-                    <label className="form-label">Last Name</label>
-                    <input
-                      name="last_name"
-                      className="form-control"
-                      value={formData.last_name}
-                      onChange={handleChange}
-                    />
-                  </div>
-
-                  <div className="col-md-6">
-                    <label className="form-label">National ID</label>
-                    <input
-                      name="national_id"
-                      className="form-control"
-                      value={formData.national_id}
-                      onChange={handleChange}
-                    />
-                  </div>
-
-                  <div className="col-md-6">
-                    <label className="form-label">Phone</label>
-                    <input
-                      name="primary_mobile"
-                      className="form-control"
-                      value={formData.primary_mobile}
-                      onChange={handleChange}
-                    />
-                  </div>
+                      <input
+                        name={name}
+                        className="form-control shadow-sm"
+                        style={{ borderRadius: "10px" }}
+                        value={formData[name]}
+                        onChange={handleChange}
+                      />
+                    </div>
+                  ))}
 
                   <div className="col-12">
-                    <label className="form-label">Address</label>
+                    <label className="form-label fw-semibold">Address</label>
+
                     <textarea
                       name="physical_address"
-                      className="form-control"
+                      className="form-control shadow-sm"
                       rows="3"
+                      style={{ borderRadius: "10px" }}
                       value={formData.physical_address}
                       onChange={handleChange}
                     />
                   </div>
 
                   <div className="col-md-6">
-                    <label className="form-label">Status</label>
+                    <label className="form-label fw-semibold">Status</label>
+
                     <select
                       name="status"
-                      className="form-select"
+                      className="form-select shadow-sm"
+                      style={{ borderRadius: "10px" }}
                       value={formData.status}
                       onChange={handleChange}
                     >
-                      <option value="ACTIVE">ACTIVE</option>
-                      <option value="INACTIVE">INACTIVE</option>
-                      <option value="BLOCKED">BLOCKED</option>
+                      <option value="LEAD">🟡 LEAD</option>
+                      <option value="ACTIVE">🟢 ACTIVE</option>
+                      <option value="BLOCKED">🔴 BLOCKED</option>
                     </select>
                   </div>
                 </div>
               </form>
             )}
 
-            {/* ================= LOANS TAB ================= */}
+            {/* ================= LOANS ================= */}
             {activeTab === "loans" && (
-              <div>
-                <table className="table table-bordered">
-                  <thead>
-                    <tr>
-                      <th>Code</th>
-                      <th>Principal</th>
-                      <th>Balance</th>
-                      <th>Status</th>
-                    </tr>
-                  </thead>
+              <div className="card border-0 shadow-sm">
+                <div
+                  className="card-header text-white"
+                  style={{ background: "#009A44" }}
+                >
+                  LOAN HISTORY
+                </div>
 
-                  <tbody>
-                    {loans.length > 0 ? (
-                      loans.map((l) => (
-                        <tr key={l.id}>
-                          <td>{l.code}</td>
-                          <td>{l.principal}</td>
-                          <td>{l.balance}</td>
-                          <td>{l.status?.name}</td>
-                        </tr>
-                      ))
-                    ) : (
+                <div className="table-responsive">
+                  <table className="table table-hover align-middle mb-0">
+                    <thead style={{ background: "#eaf7ef" }}>
                       <tr>
-                        <td colSpan="4">No loans found</td>
+                        <th>Code</th>
+                        <th>Principal</th>
+                        <th>Balance</th>
+                        <th>Status</th>
                       </tr>
-                    )}
-                  </tbody>
-                </table>
+                    </thead>
+
+                    <tbody>
+                      {loans.length > 0 ? (
+                        loans.map((l) => (
+                          <tr key={l.id}>
+                            <td className="fw-semibold">{l.code}</td>
+                            <td>{l.principal}</td>
+                            <td>{l.balance}</td>
+                            <td>
+                              <span
+                                className="badge"
+                                style={{
+                                  background:
+                                    l.status?.name === "ACTIVE"
+                                      ? "#009A44"
+                                      : l.status?.name === "LEAD"
+                                        ? "#F4B400"
+                                        : "#E4002B",
+                                  color: "#fff",
+                                }}
+                              >
+                                {l.status?.name}
+                              </span>
+                            </td>
+                          </tr>
+                        ))
+                      ) : (
+                        <tr>
+                          <td
+                            colSpan="4"
+                            className="text-center text-muted py-3"
+                          >
+                            No loans found
+                          </td>
+                        </tr>
+                      )}
+                    </tbody>
+                  </table>
+                </div>
               </div>
             )}
 
-            {/* ================= FINANCIAL TAB ================= */}
+            {/* ================= FINANCIAL ================= */}
             {activeTab === "financial" && (
               <div className="row g-3">
                 <div className="col-md-6">
-                  <div className="card p-3">
-                    <strong>Total Loans</strong>
-                    <div>{loans.length}</div>
+                  <div className="card border-0 shadow-sm p-3">
+                    <small style={{ color: "#666" }}>Total Loans</small>
+                    <h3 className="mb-0" style={{ color: "#009A44" }}>
+                      {loans.length}
+                    </h3>
                   </div>
                 </div>
 
                 <div className="col-md-6">
-                  <div className="card p-3">
-                    <strong>Total Balance</strong>
-                    <div>
+                  <div className="card border-0 shadow-sm p-3">
+                    <small style={{ color: "#666" }}>Total Balance</small>
+                    <h3 className="mb-0" style={{ color: "#009A44" }}>
                       {loans.reduce(
                         (sum, l) => sum + Number(l.balance || 0),
                         0,
                       )}
-                    </div>
+                    </h3>
                   </div>
                 </div>
               </div>
@@ -250,17 +243,28 @@ function EditMemberModal({ member, onSuccess }) {
           </div>
 
           {/* FOOTER */}
-          <div className="modal-footer">
+          <div className="modal-footer" style={{ background: "#f5f7fb" }}>
             <button
               type="button"
-              className="btn btn-secondary"
+              className="btn"
               data-bs-dismiss="modal"
+              style={{
+                border: "1px solid #ccc",
+                borderRadius: "10px",
+              }}
             >
               Close
             </button>
 
             {activeTab === "profile" && (
-              <button className="btn btn-primary" onClick={handleSubmit}>
+              <button
+                className="btn text-white px-4"
+                onClick={handleSubmit}
+                style={{
+                  background: "#E4002B", // CurePlus RED
+                  borderRadius: "10px",
+                }}
+              >
                 Save Changes
               </button>
             )}

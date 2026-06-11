@@ -1,34 +1,38 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import api from "../../api";
+
 import { useMembers } from "../../hooks/useMembers";
 import { useEmployers } from "../../hooks/useEmployers";
+import { useLoanStages } from "../../hooks/useTransactions";
+import {
+  useLoanOfficers,
+  useCreditOfficer,
+  useCollectors,
+} from "../../hooks/useStaffs";
 
-export default function AddLoanModal({
- 
-  
-  products = [],
-  loanOfficers = [],
-  creditOfficers = [],
-  collectors = [],
-  stages = [],
-  statuses = [],
-  onSuccess,
-}) {
-    const { members } = useMembers();
-    const { employers } = useEmployers();
+export default function AddLoanModal({ products = [], selectedMember }) {
+  const { members } = useMembers();
+  const activemembers = members.filter((m) => m.status === "ACTIVE");
+  const { employers } = useEmployers();
+  const { loanofficers } = useLoanOfficers();
+  const { creditofficers } = useCreditOfficer();
+  const { collectors } = useCollectors();
+  const { loanstages } = useLoanStages();
+  const [successMsg, setSuccessMsg] = useState("");
+
   const [form, setForm] = useState({
     customer: "",
     employer: "",
     product: "",
 
-    principal: "",
+    principal: "0",
     addons: 0,
     deductions: 0,
 
-    disbursed_amount: "",
-    repayable_amount: "",
-    repaid_amount: "",
-    balance: "",
+    disbursed_amount: "0",
+    repayable_amount: "0",
+    repaid_amount: "0",
+    balance: "0",
 
     disbursed_date: "",
     due_date: "",
@@ -37,14 +41,13 @@ export default function AddLoanModal({
     next_repay_date: "",
 
     current_installment: 1,
-    current_installment_amount: "",
+    current_installment_amount: "0",
 
     current_loan_officer: "",
     current_credit_officer: "",
     current_collector: "",
 
-    stage: "",
-    status: "",
+    stage_id: "",
 
     created_by: "",
   });
@@ -55,24 +58,41 @@ export default function AddLoanModal({
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
+  useEffect(() => {
+    if (selectedMember) {
+      setForm((prev) => ({
+        ...prev,
+        customer_id: selectedMember.uid,
+        employer: selectedMember.employer || "",
+      }));
+    }
+  }, [selectedMember]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     setError("");
+    console.log("loan detailssssss", form);
 
     try {
-      await api.post("/transactions/", form);
+      const res = await api.post(
+        "http://127.0.0.1:8000/api/transactions/",
+        form,
+      );
+      console.log("posting loan", res.data);
 
       setLoading(false);
-      onSuccess?.();
 
-      const modalEl = document.getElementById("addLoanModal");
-      const modal = window.bootstrap.Modal.getInstance(modalEl);
-      modal.hide();
+      setSuccessMsg("Loan added successfully!");
+      // onClose();
+      setTimeout(() => {
+        document.getElementById("closeLoanModal").click();
+        setSuccessMsg("");
+      }, 2000);
     } catch (err) {
       setLoading(false);
-      setError(err?.response?.data?.detail || "Failed to create loan");
+      setError(err?.response?.data || "Failed to create loan");
+      console.log("error adding loan", err);
     }
   };
 
@@ -82,7 +102,9 @@ export default function AddLoanModal({
         <div className="modal-content">
           {/* HEADER */}
           <div className="modal-header">
-            <h5 className="modal-title">Add Loan (Full Transaction)</h5>
+            <h5 className="modal-title">
+              Add Loan (Full Transaction) - {selectedMember?.first_name}
+            </h5>
             <button className="btn-close" data-bs-dismiss="modal" />
           </div>
 
@@ -94,40 +116,86 @@ export default function AddLoanModal({
                 overflowY: "auto",
               }}
             >
-              {error && <div className="alert alert-danger">{error}</div>}
+              {error && (
+                <div className="alert alert-danger">
+                  {typeof error === "string"
+                    ? error
+                    : JSON.stringify(error, null, 2)}
+                </div>
+              )}
+              {successMsg && (
+                <div className="alert alert-success">{successMsg}</div>
+              )}
 
               <div className="row g-3">
                 {/* ================= CUSTOMER INFO ================= */}
+
                 <div className="col-md-6">
                   <label>Customer</label>
-                  <select
-                    name="customer"
-                    className="form-select"
-                    onChange={handleChange}
-                  >
-                    <option value="">Select</option>
-                    {members.map((c) => (
-                      <option key={c.uid} value={c.id}>
-                        {c.first_name} {c.last_name}
-                      </option>
-                    ))}
-                  </select>
+
+                  {selectedMember ? (
+                    <>
+                      {/* locked input view */}
+                      <input
+                        className="form-control"
+                        value={`${selectedMember.first_name} ${selectedMember.last_name}`}
+                        disabled
+                      />
+
+                      {/* hidden actual value sent to backend */}
+                      <input
+                        type="hidden"
+                        name="customer"
+                        value={selectedMember.uid}
+                      />
+                    </>
+                  ) : (
+                    <select
+                      name="customer"
+                      className="form-select"
+                      onChange={handleChange}
+                      value={form.customer}
+                    >
+                      <option value="">Select Customer</option>
+
+                      {activemembers.map((c) => (
+                        <option key={c.uid} value={c.uid}>
+                          {c.first_name} {c.last_name}
+                        </option>
+                      ))}
+                    </select>
+                  )}
                 </div>
 
                 <div className="col-md-6">
                   <label>Employer</label>
-                  <select
-                    name="employer"
-                    className="form-select"
-                    onChange={handleChange}
-                  >
-                    <option value="">Optional</option>
-                    {employers.map((e) => (
-                      <option key={e.id} value={e.id}>
-                        {e.name}
-                      </option>
-                    ))}
-                  </select>
+                  {selectedMember ? (
+                    <>
+                      <input
+                        className="form-control"
+                        value={selectedMember?.employer_detail?.name}
+                        disabled
+                      />
+                      <input
+                        type="hidden"
+                        name="employer"
+                        value={selectedMember.employer_detail.id}
+                      />
+                    </>
+                  ) : (
+                    <select
+                      name="employer"
+                      className="form-select"
+                      onChange={handleChange}
+                    >
+                      <option value="">Optional</option>
+                      {employers.map((e) => (
+                        <option key={e.id} value={e.id}>
+                          {e.name}
+                        </option>
+                      ))}
+                    </select>
+                  )}
                 </div>
 
                 <div className="col-md-6">
@@ -152,6 +220,7 @@ export default function AddLoanModal({
                   <input
                     type="number"
                     name="principal"
+                    value={form.principal}
                     className="form-control"
                     onChange={handleChange}
                   />
@@ -162,6 +231,7 @@ export default function AddLoanModal({
                   <input
                     type="number"
                     name="addons"
+                    value={form.addons}
                     className="form-control"
                     onChange={handleChange}
                   />
@@ -171,6 +241,7 @@ export default function AddLoanModal({
                   <label>Deductions</label>
                   <input
                     type="number"
+                    value={form.deductions}
                     name="deductions"
                     className="form-control"
                     onChange={handleChange}
@@ -181,6 +252,7 @@ export default function AddLoanModal({
                   <label>Disbursed Amount</label>
                   <input
                     type="number"
+                    value={form.disbursed_amount}
                     name="disbursed_amount"
                     className="form-control"
                     onChange={handleChange}
@@ -191,6 +263,7 @@ export default function AddLoanModal({
                   <label>Repayable Amount</label>
                   <input
                     type="number"
+                    value={form.repayable_amount}
                     name="repayable_amount"
                     className="form-control"
                     onChange={handleChange}
@@ -202,6 +275,7 @@ export default function AddLoanModal({
                   <input
                     type="number"
                     name="repaid_amount"
+                    value={form.repaid_amount}
                     className="form-control"
                     onChange={handleChange}
                   />
@@ -211,6 +285,7 @@ export default function AddLoanModal({
                   <label>Balance</label>
                   <input
                     type="number"
+                    value={form.balance}
                     name="balance"
                     className="form-control"
                     onChange={handleChange}
@@ -275,6 +350,7 @@ export default function AddLoanModal({
                     type="number"
                     name="current_installment"
                     className="form-control"
+                    value={form.current_installment}
                     onChange={handleChange}
                   />
                 </div>
@@ -285,6 +361,7 @@ export default function AddLoanModal({
                     type="number"
                     name="current_installment_amount"
                     className="form-control"
+                    value={form.current_installment_amount}
                     onChange={handleChange}
                   />
                 </div>
@@ -298,7 +375,7 @@ export default function AddLoanModal({
                     onChange={handleChange}
                   >
                     <option value="">Select</option>
-                    {loanOfficers.map((l) => (
+                    {loanofficers.map((l) => (
                       <option key={l.id} value={l.id}>
                         {l.name}
                       </option>
@@ -314,7 +391,7 @@ export default function AddLoanModal({
                     onChange={handleChange}
                   >
                     <option value="">Select</option>
-                    {creditOfficers.map((c) => (
+                    {creditofficers.map((c) => (
                       <option key={c.id} value={c.id}>
                         {c.name}
                       </option>
@@ -342,28 +419,14 @@ export default function AddLoanModal({
                 <div className="col-md-6">
                   <label>Stage</label>
                   <select
-                    name="stage"
+                    name="stage_id"
                     className="form-select"
                     onChange={handleChange}
+                    value={form.stage_id || ""}
+                    required
                   >
                     <option value="">Select</option>
-                    {stages.map((s) => (
-                      <option key={s.id} value={s.id}>
-                        {s.name}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-
-                <div className="col-md-6">
-                  <label>Status</label>
-                  <select
-                    name="status"
-                    className="form-select"
-                    onChange={handleChange}
-                  >
-                    <option value="">Select</option>
-                    {statuses.map((s) => (
+                    {loanstages.map((s) => (
                       <option key={s.id} value={s.id}>
                         {s.name}
                       </option>
@@ -379,6 +442,7 @@ export default function AddLoanModal({
                 type="button"
                 className="btn btn-secondary"
                 data-bs-dismiss="modal"
+                id="closeLoanModal"
               >
                 Cancel
               </button>

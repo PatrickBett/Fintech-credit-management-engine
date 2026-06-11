@@ -1,6 +1,7 @@
 import { useEmployers, useAddEmployer } from "../../hooks/useEmployers";
 import { FaEye, FaComment, FaPlus, FaSearch } from "react-icons/fa";
 import AddEmployerModal from "../../modals/customer/AddEmployerModal";
+import AddLoanModal from "../../modals/customer/AddLoanModal";
 
 function Groups() {
   const { employers, isPending, error } = useEmployers();
@@ -114,6 +115,7 @@ function Groups() {
         </div>
       </div>
       <AddEmployerModal addEmployer={addEmployer} />
+   
     </div>
   );
 }

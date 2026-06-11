@@ -150,9 +150,9 @@ export default function AddPaymentModal({ onClose }) {
                     required
                   >
                     <option value="">Select Loan</option>
-                    {transactions.map((l) => (
-                      <option key={l.id} value={l.id}>
-                        {l.code}
+                    {transactions.map((t) => (
+                      <option key={t.id} value={t.id}>
+                        {t.code}
                       </option>
                     ))}
                   </select>

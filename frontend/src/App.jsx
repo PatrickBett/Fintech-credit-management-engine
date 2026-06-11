@@ -18,7 +18,7 @@ import Leads from "./modules/members/Leads";
 import Groups from "./modules/members/Groups";
 import Scoring from "./modules/members/Scoring";
 
-import Staff from "./modules/organizations/Staff";
+import StaffPage from "./modules/organizations/StaffPage";
 import Branches from "./modules/organizations/Branches";
 
 import AllLoans from "./modules/loans/AllLoans";
@@ -39,7 +39,6 @@ import DefaulterAgeing from "./modules/accounting/DefaulterAgeing";
 import TrialBalance from "./modules/accounting/TrialBalance";
 import Audit from "./modules/accounting/Audit";
 import Expenses from "./modules/accounting/Expenses";
-
 
 import CreditLimit from "./modules/custom/CreditLimit";
 
@@ -72,7 +71,7 @@ export default function AppRoutes() {
           <Route path="payments" element={<Payments />} />
 
           <Route path="org" element={<Organizations />}>
-            <Route path="staff" element={<Staff />} />
+            <Route path="staff" element={<StaffPage />} />
             <Route path="branches" element={<Branches />} />
           </Route>
 

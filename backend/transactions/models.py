@@ -190,12 +190,13 @@ class Transaction(models.Model):
         on_delete=models.SET_NULL,
         null=True
     )
+    
 
-    status = models.ForeignKey(
-        LoanStatus,
-        on_delete=models.SET_NULL,
-        null=True
-    )
+    # status = models.ForeignKey(
+    #     LoanStatus,
+    #     on_delete=models.SET_NULL,
+    #     null=True
+    # )
 
     # Audit
     created_by = models.ForeignKey(

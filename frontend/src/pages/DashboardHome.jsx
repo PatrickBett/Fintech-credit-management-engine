@@ -10,61 +10,9 @@ function DashboardHome() {
   const BRAND_RED = "#E4002B";
   const DARK = "#111827";
 
-  const styles = {
-    page: {
-      background: "#f4f6fb",
-      minHeight: "100vh",
-      padding: "24px",
-      fontFamily: "Arial, sans-serif",
-    },
-
-    header: {
-      marginBottom: "24px",
-    },
-
-    title: {
-      fontSize: "24px",
-      fontWeight: 700,
-      margin: 0,
-      color: DARK,
-    },
-
-    subtitle: {
-      marginTop: "6px",
-      color: "#6b7280",
-    },
-
-    kpiCard: (bgColor, color) => ({
-      background: bgColor,
-      borderRadius: "16px",
-      padding: "18px",
-      boxShadow: "0 10px 20px rgba(0,0,0,0.08)",
-      color: color,
-      position: "relative",
-      overflow: "hidden",
-    }),
-
-    kpiLabel: {
-      fontSize: "13px",
-      margin: 0,
-      opacity: 0.9,
-    },
-
-    kpiValue: {
-      fontSize: "30px",
-      fontWeight: 700,
-      marginTop: "10px",
-    },
-
-    sectionCard: {
-      background: "#fff",
-      borderRadius: "16px",
-      padding: "18px",
-      border: "1px solid #e6e8f0",
-      boxShadow: "0 8px 20px rgba(0,0,0,0.05)",
-    },
-  };
-
+  // -----------------------
+  // DUMMY FINTECH METRICS
+  // -----------------------
   const stats = [
     {
       label: "Total Customers",
@@ -79,43 +27,128 @@ function DashboardHome() {
       color: "#fff",
     },
     {
+      label: "Total Loans",
+      value: 128,
+      bg: "#2563eb",
+      color: "#fff",
+    },
+    {
       label: "Active Loans",
-      value: 342,
-      bg: "#ffffff",
-      color: "#111827",
+      value: 87,
+      bg: "#10b981",
+      color: "#fff",
     },
     {
       label: "Pending Approvals",
-      value: 28,
+      value: 14,
       bg: BRAND_RED,
+      color: "#fff",
+    },
+    {
+      label: "Overdue Loans",
+      value: 9,
+      bg: "#dc2626",
+      color: "#fff",
+    },
+    {
+      label: "Total Disbursed",
+      value: "KES 5,420,000",
+      bg: "#f59e0b",
+      color: "#111827",
+    },
+    {
+      label: "Outstanding Balance",
+      value: "KES 1,280,500",
+      bg: "#7c3aed",
       color: "#fff",
     },
   ];
 
   const activities = [
-    { text: "John Doe applied for a loan", time: "2 mins ago" },
-    { text: "Payment received from Jane Smith", time: "10 mins ago" },
+    { text: "Loan approved for John Doe", time: "2 mins ago" },
+    { text: "KES 12,000 repayment received", time: "10 mins ago" },
     { text: "New customer registered", time: "25 mins ago" },
-    { text: "Loan approved for Michael", time: "1 hour ago" },
+    { text: "Loan moved to disbursement stage", time: "1 hour ago" },
   ];
+
+  const styles = {
+    page: {
+      background: "#f4f6fb",
+      minHeight: "100vh",
+      padding: "24px",
+      fontFamily: "Arial, sans-serif",
+    },
+
+    header: {
+      marginBottom: "20px",
+    },
+
+    title: {
+      fontSize: "26px",
+      fontWeight: 700,
+      margin: 0,
+      color: DARK,
+    },
+
+    subtitle: {
+      marginTop: "6px",
+      color: "#6b7280",
+    },
+
+    kpiCard: (bg, color) => ({
+      background: bg,
+      borderRadius: "16px",
+      padding: "18px",
+      boxShadow: "0 10px 20px rgba(0,0,0,0.08)",
+      color,
+      height: "100%",
+    }),
+
+    kpiLabel: {
+      fontSize: "13px",
+      opacity: 0.9,
+      margin: 0,
+    },
+
+    kpiValue: {
+      fontSize: "28px",
+      fontWeight: 700,
+      marginTop: "10px",
+    },
+
+    sectionCard: {
+      background: "#fff",
+      borderRadius: "16px",
+      padding: "18px",
+      border: "1px solid #e6e8f0",
+      boxShadow: "0 6px 18px rgba(0,0,0,0.05)",
+    },
+
+    sectionTitle: {
+      fontSize: "16px",
+      fontWeight: 600,
+      marginBottom: "12px",
+    },
+  };
 
   return (
     <div style={styles.page}>
       {/* HEADER */}
       <div style={styles.header}>
-        <h2 style={styles.title}>Dashboard Overview</h2>
-        <p style={styles.subtitle}>CurePlus fintech system performance</p>
+        <h2 style={styles.title}>CurePlus Dashboard</h2>
+        <p style={styles.subtitle}>
+          Loan portfolio overview and system performance
+        </p>
       </div>
 
-      {/* KPI SECTION */}
+      {/* KPI GRID */}
       <div className="container-fluid">
         <div className="row g-3">
           {stats.map((s, i) => (
-            <div className="col-md-3" key={i}>
+            <div className="col-lg-3 col-md-4 col-sm-6" key={i}>
               <div style={styles.kpiCard(s.bg, s.color)}>
                 <p style={styles.kpiLabel}>{s.label}</p>
-
-                <h3 style={styles.kpiValue}>{s.value}</h3>
+                <div style={styles.kpiValue}>{s.value}</div>
               </div>
             </div>
           ))}
@@ -124,13 +157,13 @@ function DashboardHome() {
 
       <br />
 
-      {/* MAIN CONTENT */}
+      {/* MAIN SECTION */}
       <div className="container-fluid">
         <div className="row g-3">
-          {/* LEFT */}
+          {/* LEFT: ACTIVITY */}
           <div className="col-md-8">
             <div style={styles.sectionCard}>
-              <h5>Recent Activity</h5>
+              <div style={styles.sectionTitle}>Recent Activity</div>
 
               {activities.map((a, i) => (
                 <div
@@ -151,24 +184,26 @@ function DashboardHome() {
             </div>
           </div>
 
-          {/* RIGHT */}
+          {/* RIGHT: SYSTEM INFO */}
           <div className="col-md-4">
             <div style={{ ...styles.sectionCard, marginBottom: "12px" }}>
-              <h6>System Status</h6>
+              <div style={styles.sectionTitle}>System Status</div>
               <span style={{ color: BRAND_GREEN, fontWeight: 600 }}>
-                Operational
+                All Systems Operational
               </span>
             </div>
 
             <div style={{ ...styles.sectionCard, marginBottom: "12px" }}>
-              <h6>Loan Health</h6>
-              <p style={{ margin: 0, color: "#6b7280" }}>87% repayment rate</p>
+              <div style={styles.sectionTitle}>Loan Health</div>
+              <p style={{ margin: 0, color: "#6b7280" }}>
+                87% repayment performance
+              </p>
             </div>
 
             <div style={styles.sectionCard}>
-              <h6>Pending Tasks</h6>
+              <div style={styles.sectionTitle}>Pending Tasks</div>
               <span style={{ color: BRAND_RED, fontWeight: 600 }}>
-                12 approvals
+                12 approvals waiting
               </span>
             </div>
           </div>

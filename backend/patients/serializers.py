@@ -4,6 +4,7 @@ from rest_framework import serializers
 from django.contrib.auth import get_user_model
 from employers.serializers import EmployerSerializer
 
+
 User = get_user_model()
 
 
@@ -18,6 +19,7 @@ class ProductSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 class CreditProfileSerializer(serializers.ModelSerializer):
+    product_details= ProductSerializer(source="product", read_only=True)
     class Meta:
         model = CreditProfile
         fields = "__all__"
@@ -49,8 +51,8 @@ class CustomerSerializer(serializers.ModelSerializer):
 
     customerkyc_details = CustomerKYCSerializer(source="customerkyc", read_only=True)
     creditprofile_details = CreditProfileSerializer(source="creditprofile", read_only=True)
-    
-
+    # transactions_details = serializers.SerializerMethodField()
     class Meta:
         model = Customer
         fields = "__all__"
+   

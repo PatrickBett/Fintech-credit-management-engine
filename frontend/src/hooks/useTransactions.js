@@ -18,3 +18,19 @@ export const useTransactions = () => {
     });
     return { transactions: data, isPending, error }
 }
+//fetch loanstages
+export const useLoanStages = () => {
+
+    const fetchLoanStages = async () => {
+        const res = await api.get("http://127.0.0.1:8000/api/transactions/loanstages/");
+        const data = res.data;
+        return data;
+    }
+
+    const { data = [], isPending, error } = useQuery({
+        queryKey: ["loanstages"],
+        queryFn: fetchLoanStages,
+        staleTime: 5 * 60 * 1000, // 5minutes
+    });
+    return { loanstages: data, isPending, error }
+}

@@ -24,7 +24,7 @@ class Customer(models.Model):
         max_length=10,
         choices=[("M", "Male"), ("F", "Female")]
     )
-    net_salary = models.DecimalField(
+    limit = models.DecimalField(
         max_digits=12,
         decimal_places=2,
         null=True,

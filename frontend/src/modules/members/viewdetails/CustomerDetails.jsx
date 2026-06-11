@@ -9,8 +9,7 @@ import EditMemberModal from "../../../modals/customer/EditMemberModal";
 import AddRefereeModal from "../../../modals/customer/AddRefereeModal";
 import ConfirmModal from "../../../modals/customer/ConfirmModal";
 import EditStatusModal from "../../../modals/customer/EditStatusModal";
-
-
+import AddLoanModal from "../../../modals/customer/AddLoanModal";
 function CustomerDetails() {
   const { national_id } = useParams();
   const { members } = useMembers();
@@ -18,7 +17,7 @@ function CustomerDetails() {
   const { transactions } = useTransactions();
   const { payments } = usePayments();
   const [selectedMember, setSelectedMember] = useState(null);
-  const [status, setStatus] = useState('')
+  const [status, setStatus] = useState("");
   const [activeTab, setActiveTab] = useState("Bio Info");
   console.log("Referees", referees);
   if (!referees) return <div className="p-3">Loading...</div>;
@@ -147,7 +146,7 @@ function CustomerDetails() {
                     </tr>
                     <tr>
                       <th>Current Limit</th>
-                      <td>{customer.dob || "-"}</td>
+                      <td>{customer?.limit || "0"} Kes</td>
                     </tr>
                     <tr>
                       <th>Date Added</th>
@@ -163,11 +162,16 @@ function CustomerDetails() {
                     </tr>
                     <tr>
                       <th>Product</th>
-                      <td>{customer.dob || "-"}</td>
+                      <td>
+                        {customer?.creditprofile_details?.product_details
+                          ?.name || "-"}
+                      </td>
                     </tr>
                     <tr>
                       <th>Total Loans</th>
-                      <td>{customer.dob || "-"}</td>
+                      <td>
+                        {customer?.creditprofile_details?.total_loans || "0"}
+                      </td>
                     </tr>
                     <tr>
                       <th>KRA Pin</th>
@@ -329,7 +333,7 @@ function CustomerDetails() {
                             <td>{t.balance}</td>
                             <td>
                               <span className="badge bg-info">
-                                {t.status?.name}
+                                {t.stage?.name}
                               </span>
                             </td>
                           </tr>
@@ -621,7 +625,12 @@ function CustomerDetails() {
               </button>
 
               {customer.status === "ACTIVE" && (
-                <button className="btn btn-success w-100 mb-2">
+                <button
+                  className="btn btn-success w-100 mb-2"
+                  data-bs-toggle="modal"
+                  data-bs-target="#addLoanModal"
+                  onClick={()=>setSelectedMember(customer)}
+                >
                   ➕ Give a Loan
                 </button>
               )}
@@ -684,6 +693,7 @@ function CustomerDetails() {
         setStatus={setStatus}
         customerId={selectedMember?.uid}
       />
+      <AddLoanModal selectedMember = {selectedMember} />
     </div>
   );
 }

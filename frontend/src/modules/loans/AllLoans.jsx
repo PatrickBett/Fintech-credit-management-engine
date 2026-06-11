@@ -6,6 +6,7 @@ import { useState } from "react";
 
 function AllLoans() {
   const { transactions, isPending, error } = useTransactions();
+  const [selectedLoan, setSelectedLoan] = useState("");
   console.log("Transactions data:", transactions);
   const { addMember } = useAddMember();
 
@@ -47,7 +48,6 @@ function AllLoans() {
           style={styles.addBtn}
           data-bs-toggle="modal"
           data-bs-target="#addLoanModal"
-          
         >
           <FaPlus /> ADD NEW
         </button>
@@ -131,13 +131,19 @@ function AllLoans() {
                 <td>CO:</td>
 
                 <td>
-                  <span style={styles.status}>{t.status.name}</span>
+                  <span style={styles.status}>{t?.stage?.name}</span>
                 </td>
                 <td>---</td>
 
                 <td>
                   <div style={styles.actions}>
-                    <FaEye style={{ color: "#3498db", cursor: "pointer" }} />
+                    <FaEye
+                      style={{ color: "#3498db", cursor: "pointer" }}
+                      onClick={() => {
+                        setSelectedLoan(t);
+                        console.log("selected", t);
+                      }}
+                    />
                     <FaComment
                       style={{ color: "#f39c12", cursor: "pointer" }}
                     />

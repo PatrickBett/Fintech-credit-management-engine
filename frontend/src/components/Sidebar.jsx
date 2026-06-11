@@ -11,17 +11,12 @@ import {
   FaCogs,
   FaUserTie,
   FaCreditCard,
-  FaChevronDown, 
-  FaChevronRight
+  FaChevronDown,
+  FaChevronRight,
 } from "react-icons/fa";
 
 /* ------------------ reusable sub link ------------------ */
-const SubLink = ({
-  to,
-  label,
-  setSidebarOpen,
-  style = {},
-}) => {
+const SubLink = ({ to, label, setSidebarOpen, style = {} }) => {
   return (
     <NavLink
       to={to}
@@ -50,22 +45,21 @@ const SubLink = ({
 };
 
 /* ------------------ bullet item ------------------ */
-const BulletItem = ({ to,
-  label,
-  setSidebarOpen,
-  style = {}
- }) => (
+const BulletItem = ({ to, label, setSidebarOpen, style = {} }) => (
   <div style={{ display: "flex", alignItems: "center" }}>
-    <FaCircle style={{ fontSize: "10px", marginLeft: "28px", color: "#64748b" }} />
-    <SubLink to={to} label={label} setSidebarOpen={setSidebarOpen} style={style} />
+    <FaCircle
+      style={{ fontSize: "10px", marginLeft: "28px", color: "#64748b" }}
+    />
+    <SubLink
+      to={to}
+      label={label}
+      setSidebarOpen={setSidebarOpen}
+      style={style}
+    />
   </div>
 );
 
-export default function Sidebar({
-  isMobile,
-  sidebarOpen,
-  setSidebarOpen,
-})  {
+export default function Sidebar({ isMobile, sidebarOpen, setSidebarOpen }) {
   const [openSection, setOpenSection] = useState(null);
 
   const toggleSection = (section) => {
@@ -103,243 +97,314 @@ export default function Sidebar({
 
   return (
     <div
-  style={{
-    width: "260px",
-    height: "100vh",
-    backgroundColor: "#0f172a",
-    color: "white",
-    padding: "14px",
-    display: "flex",
-    flexDirection: "column",
-    borderRight: "1px solid #1e293b",
+      style={{
+        width: "260px",
+        height: "100vh",
+        backgroundColor: "#0f172a",
+        color: "white",
+        padding: "14px",
+        display: "flex",
+        flexDirection: "column",
+        borderRight: "1px solid #1e293b",
 
-    position: isMobile ? "fixed" : "relative",
-    top: 0,
-    left: 0,
+        position: isMobile ? "fixed" : "relative",
+        top: 0,
+        left: 0,
 
-    zIndex: 999,
+        zIndex: 999,
 
-    transform:
-      isMobile && !sidebarOpen
-        ? "translateX(-100%)"
-        : "translateX(0)",
+        transform:
+          isMobile && !sidebarOpen ? "translateX(-100%)" : "translateX(0)",
 
-    transition: "transform 0.3s ease",
-  }}
->
+        transition: "transform 0.3s ease",
+      }}
+    >
       {/* ================= LOGO ================= */}
       <div
-  style={{
-    marginBottom: "34px",
-    display: "flex",
-    alignItems: "center",
-    gap: "10px",
-  }}
->
-  <img
-    src="/src/assets/cureplusclearlogo.png"
-    alt="logo"
-    style={{
-      width: "40px",
-      height: "40px",
-      objectFit: "contain",
-    }}
-  />
+        style={{
+          marginBottom: "34px",
+          display: "flex",
+          alignItems: "center",
+          gap: "10px",
+        }}
+      >
+        <img
+          src="/src/assets/cureplusclearlogo.png"
+          alt="logo"
+          style={{
+            width: "40px",
+            height: "40px",
+            objectFit: "contain",
+          }}
+        />
 
-  <span
-    style={{
-      color: "white",
-      fontSize: "30px",
-      fontWeight: "600",
-      letterSpacing: "0.5px",
-    }}
-  >
-    Cureplus
-  </span>
-</div>
+        <span
+          style={{
+            color: "white",
+            fontSize: "30px",
+            fontWeight: "600",
+            letterSpacing: "0.5px",
+          }}
+        >
+          Cureplus
+        </span>
+      </div>
 
       <nav style={{ flex: 1 }}>
-
         {/* ================= CUSTOMERS ================= */}
         <div onClick={() => toggleSection("customers")} style={sectionStyle}>
-          <span><FaUsers /> Customers</span>
-                 <span style={{ fontSize: "12px", color: "#94a3b8" }}>
-  {openSection === "custom" ? <FaChevronDown /> : <FaChevronRight />}
-</span>
+          <span>
+            <FaUsers /> Customers
+          </span>
+          <span style={{ fontSize: "12px", color: "#94a3b8" }}>
+            {openSection === "custom" ? <FaChevronDown /> : <FaChevronRight />}
+          </span>
         </div>
 
         {openSection === "customers" && (
           <>
             <BulletItem
-  to="/dashboard/members/active"
-  label="Active"
-  setSidebarOpen={setSidebarOpen}
-  style={{ color: "#10b981" }} // Green
-/>
+              to="/dashboard/members/active"
+              label="Active"
+              setSidebarOpen={setSidebarOpen}
+              style={{ color: "#10b981" }} // Green
+            />
 
-<BulletItem
-  to="/dashboard/members/leads"
-  label="Leads"
-  setSidebarOpen={setSidebarOpen}
-  style={{ color: "#f59e0b" }} // Orange
-/>
+            <BulletItem
+              to="/dashboard/members/leads"
+              label="Leads"
+              setSidebarOpen={setSidebarOpen}
+              style={{ color: "#f59e0b" }} // Orange
+            />
 
-<BulletItem
-  to="/dashboard/members/groups"
-  label="Groups/Employers"
-  setSidebarOpen={setSidebarOpen}
-  style={{ color: "#3b82f6" }} // Blue
-/>
+            <BulletItem
+              to="/dashboard/members/groups"
+              label="Groups/Employers"
+              setSidebarOpen={setSidebarOpen}
+              style={{ color: "#3b82f6" }} // Blue
+            />
 
-<BulletItem
-  to="/dashboard/members/scoring"
-  label="Scoring"
-  setSidebarOpen={setSidebarOpen}
-  style={{ color: "#8b5cf6" }} // Purple
-/>
+            <BulletItem
+              to="/dashboard/members/scoring"
+              label="Scoring"
+              setSidebarOpen={setSidebarOpen}
+              style={{ color: "#8b5cf6" }} // Purple
+            />
           </>
         )}
 
         {/* ================= CRM ================= */}
-       <NavLink
-  to="/dashboard/crm"
-  style={({ isActive }) => linkStyle(isActive)}
->
-  <span style={{ fontWeight: 600, display: "flex", alignItems: "center", gap: "8px" }}>
-    <FaUserTie /> CRM
-  </span>
-</NavLink>
+        <NavLink
+          to="/dashboard/crm"
+          style={({ isActive }) => linkStyle(isActive)}
+        >
+          <span
+            style={{
+              fontWeight: 600,
+              display: "flex",
+              alignItems: "center",
+              gap: "8px",
+            }}
+          >
+            <FaUserTie /> CRM
+          </span>
+        </NavLink>
 
         {/* ================= PAYMENTS ================= */}
         <NavLink
-  to="/dashboard/payments"
-  style={({ isActive }) => linkStyle(isActive)}
->
-  <span style={{ fontWeight: 600, display: "flex", alignItems: "center", gap: "8px" }}>
-    <FaCreditCard /> Payments
-  </span>
-</NavLink>
-
-        
+          to="/dashboard/payments"
+          style={({ isActive }) => linkStyle(isActive)}
+        >
+          <span
+            style={{
+              fontWeight: 600,
+              display: "flex",
+              alignItems: "center",
+              gap: "8px",
+            }}
+          >
+            <FaCreditCard /> Payments
+          </span>
+        </NavLink>
 
         {/* ================= LOANS ================= */}
         <div onClick={() => toggleSection("loans")} style={sectionStyle}>
-          <span><FaMoneyBill /> Loans</span>
-                 <span style={{ fontSize: "12px", color: "#94a3b8" }}>
-  {openSection === "custom" ? <FaChevronDown /> : <FaChevronRight />}
-</span>
+          <span>
+            <FaMoneyBill /> Loans
+          </span>
+          <span style={{ fontSize: "12px", color: "#94a3b8" }}>
+            {openSection === "custom" ? <FaChevronDown /> : <FaChevronRight />}
+          </span>
         </div>
 
         {openSection === "loans" && (
           <>
             <BulletItem
-  to="/dashboard/loans/all"
-  label="All Loans"
-  setSidebarOpen={setSidebarOpen}
-  style={{ color: "#3b82f6" }}
-/>
+              to="/dashboard/loans/all"
+              label="All Loans"
+              setSidebarOpen={setSidebarOpen}
+              style={{ color: "#3b82f6" }}
+            />
 
-<BulletItem
-  to="/dashboard/loans/defaulters"
-  label="Defaulters"
-  setSidebarOpen={setSidebarOpen}
-  style={{ color: "#ef4444" }}
-/>
+            <BulletItem
+              to="/dashboard/loans/defaulters"
+              label="Defaulters"
+              setSidebarOpen={setSidebarOpen}
+              style={{ color: "#ef4444" }}
+            />
 
-<BulletItem
-  to="/dashboard/loans/installments"
-  label="Installments"
-  setSidebarOpen={setSidebarOpen}
-  style={{ color: "#f59e0b" }}
-/>
+            <BulletItem
+              to="/dashboard/loans/installments"
+              label="Installments"
+              setSidebarOpen={setSidebarOpen}
+              style={{ color: "#f59e0b" }}
+            />
 
-<BulletItem
-  to="/dashboard/loans/falling-due"
-  label="Falling Due"
-  setSidebarOpen={setSidebarOpen}
-  style={{ color: "#eab308" }}
-/>
+            <BulletItem
+              to="/dashboard/loans/falling-due"
+              label="Falling Due"
+              setSidebarOpen={setSidebarOpen}
+              style={{ color: "#eab308" }}
+            />
 
-<BulletItem
-  to="/dashboard/loans/approvals"
-  label="Approvals"
-  setSidebarOpen={setSidebarOpen}
-  style={{ color: "#10b981" }}
-/>
+            <BulletItem
+              to="/dashboard/loans/approvals"
+              label="Approvals"
+              setSidebarOpen={setSidebarOpen}
+              style={{ color: "#10b981" }}
+            />
 
-<BulletItem
-  to="/dashboard/loans/products"
-  label="Loan Products"
-  setSidebarOpen={setSidebarOpen}
-  style={{ color: "#8b5cf6" }}
-/>
+            <BulletItem
+              to="/dashboard/loans/products"
+              label="Loan Products"
+              setSidebarOpen={setSidebarOpen}
+              style={{ color: "#8b5cf6" }}
+            />
           </>
         )}
 
         {/* ================= ORGANIZATIONS ================= */}
         <div onClick={() => toggleSection("org")} style={sectionStyle}>
-          <span><FaBuilding /> Organizations</span>
-                 <span style={{ fontSize: "12px", color: "#94a3b8" }}>
-  {openSection === "custom" ? <FaChevronDown /> : <FaChevronRight />}
-</span>
+          <span>
+            <FaBuilding /> Organizations
+          </span>
+          <span style={{ fontSize: "12px", color: "#94a3b8" }}>
+            {openSection === "custom" ? <FaChevronDown /> : <FaChevronRight />}
+          </span>
         </div>
 
         {openSection === "org" && (
           <>
-            <BulletItem to="/dashboard/org/staff" label="Staff" setSidebarOpen={setSidebarOpen} />
-            <BulletItem to="/dashboard/org/branches" label="Branches" setSidebarOpen={setSidebarOpen} />
+            <BulletItem
+              to="/dashboard/org/staff"
+              label="Staff"
+              setSidebarOpen={setSidebarOpen}
+            />
+            <BulletItem
+              to="/dashboard/org/branches"
+              label="Branches"
+              setSidebarOpen={setSidebarOpen}
+            />
           </>
         )}
 
         {/* ================= REPORTS ================= */}
         <div onClick={() => toggleSection("reports")} style={sectionStyle}>
-          <span><FaChartBar /> Reports</span>
-                 <span style={{ fontSize: "12px", color: "#94a3b8" }}>
-  {openSection === "custom" ? <FaChevronDown /> : <FaChevronRight />}
-</span>
+          <span>
+            <FaChartBar /> Reports
+          </span>
+          <span style={{ fontSize: "12px", color: "#94a3b8" }}>
+            {openSection === "custom" ? <FaChevronDown /> : <FaChevronRight />}
+          </span>
         </div>
 
         {openSection === "reports" && (
           <>
-            <BulletItem to="/dashboard/reports/all" label="All Reports" setSidebarOpen={setSidebarOpen} />
-            <BulletItem to="/dashboard/reports/allocations" label="Allocations" setSidebarOpen={setSidebarOpen} />
-            <BulletItem to="/dashboard/reports/analytics" label="Analytics" setSidebarOpen={setSidebarOpen} />
-            <BulletItem to="/dashboard/reports/profile" label="Profile" setSidebarOpen={setSidebarOpen} />
+            <BulletItem
+              to="/dashboard/reports/all"
+              label="All Reports"
+              setSidebarOpen={setSidebarOpen}
+            />
+            <BulletItem
+              to="/dashboard/reports/allocations"
+              label="Allocations"
+              setSidebarOpen={setSidebarOpen}
+            />
+            <BulletItem
+              to="/dashboard/reports/analytics"
+              label="Analytics"
+              setSidebarOpen={setSidebarOpen}
+            />
+            <BulletItem
+              to="/dashboard/reports/profile"
+              label="Profile"
+              setSidebarOpen={setSidebarOpen}
+            />
           </>
         )}
 
         {/* ================= ACCOUNTING ================= */}
         <div onClick={() => toggleSection("accounting")} style={sectionStyle}>
-          <span><FaFileAlt /> Accounting</span>
-                 <span style={{ fontSize: "12px", color: "#94a3b8" }}>
-  {openSection === "custom" ? <FaChevronDown /> : <FaChevronRight />}
-</span>
+          <span>
+            <FaFileAlt /> Accounting
+          </span>
+          <span style={{ fontSize: "12px", color: "#94a3b8" }}>
+            {openSection === "custom" ? <FaChevronDown /> : <FaChevronRight />}
+          </span>
         </div>
 
         {openSection === "accounting" && (
           <>
-            <BulletItem to="/dashboard/accounting/income-statement" label="Income Statement" setSidebarOpen={setSidebarOpen} />
-            <BulletItem to="/dashboard/accounting/balance-sheet" label="Balance Sheet" setSidebarOpen={setSidebarOpen} />
-            <BulletItem to="/dashboard/accounting/defaulter-ageing" label="Defaulter Ageing" setSidebarOpen={setSidebarOpen} />
-            <BulletItem to="/dashboard/accounting/trial-balance" label="Trial Balance" setSidebarOpen={setSidebarOpen} />
-            <BulletItem to="/dashboard/accounting/audit" label="Audit" setSidebarOpen={setSidebarOpen} />
-            <BulletItem to="/dashboard/accounting/expenses" label="Expenses" setSidebarOpen={setSidebarOpen} />
+            <BulletItem
+              to="/dashboard/accounting/income-statement"
+              label="Income Statement"
+              setSidebarOpen={setSidebarOpen}
+            />
+            <BulletItem
+              to="/dashboard/accounting/balance-sheet"
+              label="Balance Sheet"
+              setSidebarOpen={setSidebarOpen}
+            />
+            <BulletItem
+              to="/dashboard/accounting/defaulter-ageing"
+              label="Defaulter Ageing"
+              setSidebarOpen={setSidebarOpen}
+            />
+            <BulletItem
+              to="/dashboard/accounting/trial-balance"
+              label="Trial Balance"
+              setSidebarOpen={setSidebarOpen}
+            />
+            <BulletItem
+              to="/dashboard/accounting/audit"
+              label="Audit"
+              setSidebarOpen={setSidebarOpen}
+            />
+            <BulletItem
+              to="/dashboard/accounting/expenses"
+              label="Expenses"
+              setSidebarOpen={setSidebarOpen}
+            />
           </>
         )}
 
-        
-
         {/* ================= CUSTOM ================= */}
         <div onClick={() => toggleSection("custom")} style={sectionStyle}>
-          <span><FaUserShield /> Custom</span>
+          <span>
+            <FaUserShield /> Custom
+          </span>
           <span style={{ fontSize: "12px", color: "#94a3b8" }}>
-  {openSection === "custom" ? <FaChevronDown /> : <FaChevronRight />}
-</span>
+            {openSection === "custom" ? <FaChevronDown /> : <FaChevronRight />}
+          </span>
         </div>
 
         {openSection === "custom" && (
           <>
-            <BulletItem to="/dashboard/custom/credit-limits" label="Credit Limits" setSidebarOpen={setSidebarOpen} />
+            <BulletItem
+              to="/dashboard/custom/credit-limits"
+              label="Credit Limits"
+              setSidebarOpen={setSidebarOpen}
+            />
           </>
         )}
 
@@ -362,7 +427,6 @@ export default function Sidebar({
         >
           <FaCogs /> Settings
         </NavLink>
-
       </nav>
 
       {/* ================= FOOTER ================= */}

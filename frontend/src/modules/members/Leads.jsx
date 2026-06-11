@@ -9,7 +9,7 @@ function Leads() {
   const navigate = useNavigate();
   const { members, isPending, error } = useMembers();
   const { addMember } = useAddMember();
-  const leadMembers = members.filter((m) => m.status === "LEAD");
+  const leadMembers = members.filter((m) => m.status === "LEAD" || m.status === "BLOCKED");
 
   if (isPending) return <div style={styles.state}>Loading...</div>;
   if (error) return <div style={styles.state}>Error loading leads</div>;
@@ -136,7 +136,17 @@ function Leads() {
                 <td>{m.physical_address}</td>
 
                 <td>
-                  <span style={styles.status}>{m.status}</span>
+                  <span
+                    className={`badge px-2 py-1 ${
+                      m.status === "ACTIVE"
+                        ? "bg-success"
+                        : m.status === "LEAD"
+                          ? "bg-warning text-dark"
+                          : "bg-danger"
+                    }`}
+                  >
+                    {m.status}
+                  </span>
                 </td>
 
                 <td>
@@ -282,13 +292,7 @@ const styles = {
     minWidth: "1000px",
   },
 
-  status: {
-    background: "#ffeaa7",
-    padding: "4px 8px",
-    borderRadius: "6px",
-    fontSize: "12px",
-    fontWeight: "bold",
-  },
+  
 
   actions: {
     display: "flex",
