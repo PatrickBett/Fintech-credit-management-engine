@@ -10,6 +10,8 @@ export default function AddEmployerModal({ addEmployer, isPending }) {
     max_exposure: "",
     contact_email: "",
     contact_phone: "",
+    chairman: "",
+    description: "",
   });
 
   const handleChange = (e) => {
@@ -28,6 +30,8 @@ export default function AddEmployerModal({ addEmployer, isPending }) {
     setFormData({
       name: "",
       code: "",
+      chairman: "",
+      description: "",
       status: "ACTIVE",
       risk_tier: "MEDIUM",
       deduction_cycle: "MONTHLY",
@@ -48,7 +52,6 @@ export default function AddEmployerModal({ addEmployer, isPending }) {
     >
       <div className="modal-dialog modal-lg">
         <div className="modal-content">
-
           {/* Header */}
           <div className="modal-header">
             <h5 className="modal-title">Add Employer</h5>
@@ -63,9 +66,7 @@ export default function AddEmployerModal({ addEmployer, isPending }) {
           {/* Form */}
           <form onSubmit={handleSubmit}>
             <div className="modal-body">
-
               <div className="row">
-
                 {/* Employer Name */}
                 <div className="col-md-6 mb-3">
                   <label className="form-label">Employer Name</label>
@@ -87,6 +88,28 @@ export default function AddEmployerModal({ addEmployer, isPending }) {
                     name="code"
                     className="form-control"
                     value={formData.code}
+                    onChange={handleChange}
+                    required
+                  />
+                </div>
+                <div className="col-md-6 mb-3">
+                  <label className="form-label">Chairman</label>
+                  <input
+                    type="text"
+                    name="chairman"
+                    className="form-control"
+                    value={formData.chairman}
+                    onChange={handleChange}
+                    required
+                  />
+                </div>
+                <div className="col-md-6 mb-3">
+                  <label className="form-label">Description</label>
+                  <input
+                    type="text"
+                    name="description"
+                    className="form-control"
+                    value={formData.description}
                     onChange={handleChange}
                     required
                   />
@@ -177,9 +200,7 @@ export default function AddEmployerModal({ addEmployer, isPending }) {
                     onChange={handleChange}
                   />
                 </div>
-
               </div>
-
             </div>
 
             {/* Footer */}
@@ -201,9 +222,7 @@ export default function AddEmployerModal({ addEmployer, isPending }) {
                 {isPending ? "Saving..." : "Save Employer"}
               </button>
             </div>
-
           </form>
-
         </div>
       </div>
     </div>

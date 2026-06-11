@@ -1,10 +1,11 @@
 import React from "react";
 import { useMembers } from "../hooks/useMembers";
 import { useEmployers } from "../hooks/useEmployers";
-
+import { useTransactions } from "../hooks/useTransactions";
 function DashboardHome() {
   const { members } = useMembers();
   const { employers } = useEmployers();
+  const { transactions } = useTransactions();
 
   const BRAND_GREEN = "#009A44";
   const BRAND_RED = "#E4002B";
@@ -28,7 +29,7 @@ function DashboardHome() {
     },
     {
       label: "Total Loans",
-      value: 128,
+      value: transactions?.length || 0,
       bg: "#2563eb",
       color: "#fff",
     },

@@ -11,7 +11,21 @@ function Active() {
   const navigate = useNavigate();
   const { members, isPending, error } = useMembers();
   const { addMember } = useAddMember();
+  const [searchTerm, setSearchTerm] = useState("");
   const activeMembers = members.filter((m) => m.status === "ACTIVE");
+
+  //search functionality
+  const filteredActiveMembers = activeMembers.filter((m) => {
+    const term = searchTerm.toLocaleLowerCase();
+    return (
+      m?.first_name?.toLowerCase().includes(term) ||
+      m?.last_name?.toLowerCase().includes(term) ||
+      m?.national_id?.toLowerCase().includes(term) ||
+      m?.primary_mobile?.toLowerCase().includes(term)
+    );
+  });
+  const hasNoResults =
+    filteredActiveMembers && filteredActiveMembers.length === 0;
 
   if (isPending) return <div style={styles.state}>Loading...</div>;
   if (error)
@@ -59,18 +73,19 @@ function Active() {
       {/* SEARCH ROW */}
       <div style={styles.searchRow}>
         <div style={styles.record}>
-          <span style={styles.badgeCount}>{activeMembers?.length || 0}</span>
+          <span style={styles.badgeCount}>
+            {filteredActiveMembers?.length || 0}
+          </span>
           Record Found
         </div>
 
         <div style={styles.searchBox}>
           <input
-            placeholder="Enter text and hit search button"
+            placeholder="Search by national id, first, last name, phone number"
             style={styles.input}
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
           />
-          <button style={styles.searchBtn}>
-            <FaSearch /> Search
-          </button>
         </div>
       </div>
 
@@ -97,70 +112,81 @@ function Active() {
           </thead>
 
           <tbody>
-            {activeMembers?.map((m, index) => (
-              <tr
-                key={m.uid}
-                style={{
-                  background: "#f9f9f9",
-                  borderBottom: "1px solid #ddd",
-                }}
-              >
-                <td>{index + 1}</td>
-                <td>{m.national_id}</td>
-
-                <td>
-                  {m.first_name} {m.last_name}
-                </td>
-
-                <td>
-                  <div>
-                    <div>{new Date(m.created_at).toLocaleDateString()}</div>
-                    <small style={styles.time}>
-                      {new Date(m.created_at).toLocaleTimeString()}
-                    </small>
-                  </div>
-                </td>
-
-                <td>
-                  {/* Name: {m.added_by.username}<br /> */}
-                  Role: BRANCH-MAN
-                </td>
-
-                <td style={styles.phone}>{m.primary_mobile}</td>
-
-                <td>
-                  HQ
-                  <br />
-                  <small>Prod: CurePlus</small>
-                </td>
-
-                <td>--</td>
-
-                <td>{m.physical_address}</td>
-
-                <td>
-                  <span style={styles.status}>{m.status}</span>
-                </td>
-
-                <td>
-                  <div style={styles.actions}>
-                    <FaEye
-                      style={{ color: "#3498db", cursor: "pointer" }}
-                      onClick={() =>
-                        navigate(`/dashboard/members/${m.national_id}`)
-                      }
-                      // data-bs-toggle="modal"
-                      // data-bs-target="#editMemberModal"
-                      // onClick={() => setSelectedMember(m)}
-                    />
-
-                    <FaComment
-                      style={{ color: "#f39c12", cursor: "pointer" }}
-                    />
-                  </div>
+            {hasNoResults ? (
+              <tr>
+                <td
+                  colSpan="13"
+                  style={{ textAlign: "center", padding: "20px" }}
+                >
+                  No Active Member found
                 </td>
               </tr>
-            ))}
+            ) : (
+              filteredActiveMembers?.map((m, index) => (
+                <tr
+                  key={m.uid}
+                  style={{
+                    background: "#f9f9f9",
+                    borderBottom: "1px solid #ddd",
+                  }}
+                >
+                  <td>{index + 1}</td>
+                  <td>{m.national_id}</td>
+
+                  <td>
+                    {m.first_name} {m.last_name}
+                  </td>
+
+                  <td>
+                    <div>
+                      <div>{new Date(m.created_at).toLocaleDateString()}</div>
+                      <small style={styles.time}>
+                        {new Date(m.created_at).toLocaleTimeString()}
+                      </small>
+                    </div>
+                  </td>
+
+                  <td>
+                    {/* Name: {m.added_by.username}<br /> */}
+                    Role: BRANCH-MAN
+                  </td>
+
+                  <td style={styles.phone}>{m.primary_mobile}</td>
+
+                  <td>
+                    HQ
+                    <br />
+                    <small>Prod: CurePlus</small>
+                  </td>
+
+                  <td>--</td>
+
+                  <td>{m.physical_address}</td>
+
+                  <td>
+                    <span style={styles.status}>{m.status}</span>
+                  </td>
+
+                  <td>
+                    <div style={styles.actions}>
+                      <FaEye
+                        style={{ color: "#3498db", cursor: "pointer" }}
+                        onClick={() =>
+                          navigate(`/dashboard/members/${m.national_id}`)
+                        }
+                        // data-bs-toggle="modal"
+                        // data-bs-target="#editMemberModal"
+                        // onClick={() => setSelectedMember(m)}
+                      />
+
+                      <FaComment
+                        style={{ color: "#f39c12", cursor: "pointer" }}
+                      />
+                    </div>
+                  </td>
+                </tr>
+              ))
+            )}
           </tbody>
         </table>
       </div>

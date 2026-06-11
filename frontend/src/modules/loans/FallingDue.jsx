@@ -123,7 +123,7 @@ function FallingDue() {
                 <td>CO:</td>
 
                 <td>
-                  <span style={styles.status}>{t.status.name}</span>
+                  <span style={styles.status}>{t?.stage?.name}</span>
                 </td>
                 <td>---</td>
 

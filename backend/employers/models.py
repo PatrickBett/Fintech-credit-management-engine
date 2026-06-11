@@ -31,7 +31,7 @@ class Employer(TimeStampedModel):
 
     # Basic group info (matches your UI)
     description = models.TextField(null=True, blank=True)
-    branch = models.CharField(max_length=100, null=True, blank=True)
+    branch = models.CharField(max_length=100, null=True, blank=True, default="HQ")
     chairman = models.CharField(max_length=255, null=True, blank=True)
     contact_phone = models.CharField(max_length=20, null=True, blank=True)
 

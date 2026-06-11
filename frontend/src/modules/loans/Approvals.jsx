@@ -5,24 +5,23 @@ import AddCustomerModal from "../../modals/customer/AddCustomerModal";
 import { useState } from "react";
 
 function Approvals() {
- 
   const { transactions, isPending, error } = useTransactions();
   console.log("Transactions data:", transactions);
-   const { addMember } = useAddMember();
- 
+  const { addMember } = useAddMember();
 
   if (isPending) return <div style={styles.state}>Loading...</div>;
-  if (error) return <div style={styles.state}>Error loading active customers</div>;
+  if (error)
+    return <div style={styles.state}>Error loading active customers</div>;
 
   return (
     <div style={styles.page}>
       {/* HEADER */}
       <div style={styles.header}>
-        <h2>Approvals <span style={styles.subTitle}>List</span></h2>
+        <h2>
+          Approvals <span style={styles.subTitle}>List</span>
+        </h2>
 
-        <div style={styles.breadcrumb}>
-          Home &gt; Approvals
-        </div>
+        <div style={styles.breadcrumb}>Home &gt; Approvals</div>
       </div>
 
       {/* TOOLBAR */}
@@ -45,9 +44,10 @@ function Approvals() {
         </select>
 
         <button
-        style={styles.addBtn}
-        data-bs-toggle="modal"
-        data-bs-target="#addMemberModal">
+          style={styles.addBtn}
+          data-bs-toggle="modal"
+          data-bs-target="#addMemberModal"
+        >
           <FaPlus /> ADD NEW
         </button>
       </div>
@@ -72,7 +72,10 @@ function Approvals() {
 
       {/* TABLE */}
       <div style={styles.tableWrapper}>
-        <table style={styles.table} className="table table-striped table-responsive table-bordered">
+        <table
+          style={styles.table}
+          className="table table-striped table-responsive table-bordered"
+        >
           <thead>
             <tr>
               <th>CODE</th>
@@ -84,7 +87,7 @@ function Approvals() {
               <th>Balance</th>
               <th>Disbursed Date</th>
               <th>Due Date</th>
-              <th>BDO</th>    
+              <th>BDO</th>
               <th>Status</th>
               <th>Flag</th>
               <th>Action</th>
@@ -93,28 +96,32 @@ function Approvals() {
 
           <tbody>
             {transactions?.map((t) => (
-              <tr key={t.id} style={{ background: "#f9f9f9", borderBottom: "1px solid #ddd" }}>
-               <td>{t.code}</td>  
-                <td>{t.customer.first_name} {t.customer.last_name}</td>
-
+              <tr
+                key={t.id}
+                style={{
+                  background: "#f9f9f9",
+                  borderBottom: "1px solid #ddd",
+                }}
+              >
+                <td>{t.code}</td>
                 <td>
-                  {t.principal}
+                  {t.customer.first_name} {t.customer.last_name}
                 </td>
 
-                <td>
-                  {t.addons}
-                </td>
+                <td>{t.principal}</td>
+
+                <td>{t.addons}</td>
 
                 <td>
-                  {t.deductions}<br />
-                  
+                  {t.deductions}
+                  <br />
                 </td>
 
                 <td style={styles.phone}>{t.repaid_amount}</td>
 
                 <td>
-                  {t.balance}<br />
-                  
+                  {t.balance}
+                  <br />
                 </td>
 
                 <td>{t.disbursed_date}</td>
@@ -123,14 +130,16 @@ function Approvals() {
                 <td>CO:</td>
 
                 <td>
-                  <span style={styles.status}>{t.status.name}</span>
+                  <span style={styles.status}>{t?.stage?.name}</span>
                 </td>
                 <td>---</td>
 
                 <td>
                   <div style={styles.actions}>
                     <FaEye style={{ color: "#3498db", cursor: "pointer" }} />
-                    <FaComment style={{ color: "#f39c12", cursor: "pointer" }} />
+                    <FaComment
+                      style={{ color: "#f39c12", cursor: "pointer" }}
+                    />
                   </div>
                 </td>
               </tr>
@@ -153,12 +162,10 @@ function Approvals() {
           <button>Next →</button>
         </div>
       </div>
-     
+
       <AddCustomerModal addMember={addMember} />
     </div>
-    
   );
- 
 }
 
 export default Approvals;

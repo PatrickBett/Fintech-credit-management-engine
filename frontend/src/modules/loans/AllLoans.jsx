@@ -7,8 +7,24 @@ import { useState } from "react";
 function AllLoans() {
   const { transactions, isPending, error } = useTransactions();
   const [selectedLoan, setSelectedLoan] = useState("");
+  const [searchTerm, setSearchTerm] = useState("");
   console.log("Transactions data:", transactions);
   const { addMember } = useAddMember();
+
+  //search functionality
+  const filteredTransactions = transactions?.filter((t) => {
+    const term = searchTerm.toLowerCase();
+    return (
+      t?.code?.toLowerCase().includes(term) ||
+      t?.customer?.first_name?.toLowerCase().includes(term) ||
+      t?.customer?.last_name?.toLowerCase().includes(term) ||
+      t?.stage?.name?.toLowerCase().includes(term)
+    );
+  });
+
+  //
+  const hasNoResults =
+    filteredTransactions && filteredTransactions.length === 0;
 
   if (isPending) return <div style={styles.state}>Loading...</div>;
   if (error)
@@ -56,18 +72,22 @@ function AllLoans() {
       {/* SEARCH ROW */}
       <div style={styles.searchRow}>
         <div style={styles.record}>
-          <span style={styles.badgeCount}>{transactions?.length || 0}</span>
+          <span style={styles.badgeCount}>
+            {filteredTransactions?.length || 0}
+          </span>
           Record Found
         </div>
 
         <div style={styles.searchBox}>
           <input
-            placeholder="Enter text and hit search button"
+            placeholder="Search by name,code,status"
             style={styles.input}
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
           />
-          <button style={styles.searchBtn}>
+          {/* <button style={styles.searchBtn}>
             <FaSearch /> Search
-          </button>
+          </button> */}
         </div>
       </div>
 
@@ -96,61 +116,72 @@ function AllLoans() {
           </thead>
 
           <tbody>
-            {transactions?.map((t) => (
-              <tr
-                key={t.id}
-                style={{
-                  background: "#f9f9f9",
-                  borderBottom: "1px solid #ddd",
-                }}
-              >
-                <td>{t.code}</td>
-                <td>
-                  {t.customer.first_name} {t.customer.last_name}
-                </td>
-
-                <td>{t.principal}</td>
-
-                <td>{t.addons}</td>
-
-                <td>
-                  {t.deductions}
-                  <br />
-                </td>
-
-                <td style={styles.phone}>{t.repaid_amount}</td>
-
-                <td>
-                  {t.balance}
-                  <br />
-                </td>
-
-                <td>{t.disbursed_date}</td>
-
-                <td>{t.due_date}</td>
-                <td>CO:</td>
-
-                <td>
-                  <span style={styles.status}>{t?.stage?.name}</span>
-                </td>
-                <td>---</td>
-
-                <td>
-                  <div style={styles.actions}>
-                    <FaEye
-                      style={{ color: "#3498db", cursor: "pointer" }}
-                      onClick={() => {
-                        setSelectedLoan(t);
-                        console.log("selected", t);
-                      }}
-                    />
-                    <FaComment
-                      style={{ color: "#f39c12", cursor: "pointer" }}
-                    />
-                  </div>
+            {hasNoResults ? (
+              <tr>
+                <td
+                  colSpan="13"
+                  style={{ textAlign: "center", padding: "20px" }}
+                >
+                  No Loan found
                 </td>
               </tr>
-            ))}
+            ) : (
+              filteredTransactions?.map((t) => (
+                <tr
+                  key={t.id}
+                  style={{
+                    background: "#f9f9f9",
+                    borderBottom: "1px solid #ddd",
+                  }}
+                >
+                  <td>{t.code}</td>
+                  <td>
+                    {t.customer.first_name} {t.customer.last_name} {t?.customer?.primary_mobile}
+                  </td>
+
+                  <td>{t.principal}</td>
+
+                  <td>{t.addons}</td>
+
+                  <td>
+                    {t.deductions}
+                    <br />
+                  </td>
+
+                  <td style={styles.phone}>{t.repaid_amount}</td>
+
+                  <td>
+                    {t.balance}
+                    <br />
+                  </td>
+
+                  <td>{t.disbursed_date}</td>
+
+                  <td>{t.due_date}</td>
+                  <td>CO:</td>
+
+                  <td>
+                    <span style={styles.status}>{t?.stage?.name}</span>
+                  </td>
+                  <td>---</td>
+
+                  <td>
+                    <div style={styles.actions}>
+                      <FaEye
+                        style={{ color: "#3498db", cursor: "pointer" }}
+                        onClick={() => {
+                          setSelectedLoan(t);
+                          console.log("selected", t);
+                        }}
+                      />
+                      <FaComment
+                        style={{ color: "#f39c12", cursor: "pointer" }}
+                      />
+                    </div>
+                  </td>
+                </tr>
+              ))
+            )}
           </tbody>
         </table>
       </div>

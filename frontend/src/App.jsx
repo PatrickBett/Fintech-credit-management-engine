@@ -43,6 +43,7 @@ import Expenses from "./modules/accounting/Expenses";
 import CreditLimit from "./modules/custom/CreditLimit";
 
 import CustomerDetails from "./modules/members/viewdetails/CustomerDetails";
+import GroupDetails from "./modules/groups/GroupDetails";
 
 export default function AppRoutes() {
   return (
@@ -50,6 +51,7 @@ export default function AppRoutes() {
       <Routes>
         <Route path="/dashboard" element={<DashboardLayout />}>
           <Route path="members/:national_id" element={<CustomerDetails />} />
+          <Route path="groups/:id" element={<GroupDetails />} />
           <Route index element={<DashboardHome />} />
 
           <Route path="members" element={<Members />}>

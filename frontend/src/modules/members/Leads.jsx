@@ -9,7 +9,20 @@ function Leads() {
   const navigate = useNavigate();
   const { members, isPending, error } = useMembers();
   const { addMember } = useAddMember();
-  const leadMembers = members.filter((m) => m.status === "LEAD" || m.status === "BLOCKED");
+  const [searchTerm, setSearchTerm] = useState("");
+  const leadMembers = members.filter(
+    (m) => m.status === "LEAD" || m.status === "BLOCKED",
+  );
+  const filteredLeadMembers = leadMembers.filter((m) => {
+    const term = searchTerm.toLowerCase();
+    return (
+      m?.first_name?.toLowerCase().includes(term) ||
+      m?.last_name?.toLowerCase().includes(term) ||
+      m?.national_id?.toLowerCase().includes(term) ||
+      m?.primary_mobile?.toLowerCase().includes(term)
+    );
+  });
+  const hasNoResults = filteredLeadMembers && filteredLeadMembers.length === 0;
 
   if (isPending) return <div style={styles.state}>Loading...</div>;
   if (error) return <div style={styles.state}>Error loading leads</div>;
@@ -56,18 +69,19 @@ function Leads() {
       {/* SEARCH ROW */}
       <div style={styles.searchRow}>
         <div style={styles.record}>
-          <span style={styles.badgeCount}>{leadMembers?.length || 0}</span>
+          <span style={styles.badgeCount}>
+            {filteredLeadMembers?.length || 0}
+          </span>
           Record Found
         </div>
 
         <div style={styles.searchBox}>
           <input
-            placeholder="Enter text and hit search button"
+            placeholder="Search by national id, first, last name, phone number"
             style={styles.input}
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
           />
-          <button style={styles.searchBtn}>
-            <FaSearch /> Search
-          </button>
         </div>
       </div>
 
@@ -94,76 +108,87 @@ function Leads() {
           </thead>
 
           <tbody>
-            {leadMembers?.map((m, index) => (
-              <tr
-                key={m.uid}
-                style={{
-                  background: "#f9f9f9",
-                  borderBottom: "1px solid #ddd",
-                }}
-              >
-                <td>{index + 1}</td>
-                <td>{m.national_id}</td>
-
-                <td>
-                  {m.first_name} {m.last_name}
-                </td>
-
-                <td>
-                  <div>
-                    <div>{new Date(m.created_at).toLocaleDateString()}</div>
-                    <small style={styles.time}>
-                      {new Date(m.created_at).toLocaleTimeString()}
-                    </small>
-                  </div>
-                </td>
-
-                <td>
-                  {/* Name: {m.added_by.username}<br /> */}
-                  Role: BRANCH-MAN
-                </td>
-
-                <td style={styles.phone}>{m.primary_mobile}</td>
-
-                <td>
-                  HQ
-                  <br />
-                  <small>Prod: CurePlus</small>
-                </td>
-
-                <td>--</td>
-
-                <td>{m.physical_address}</td>
-
-                <td>
-                  <span
-                    className={`badge px-2 py-1 ${
-                      m.status === "ACTIVE"
-                        ? "bg-success"
-                        : m.status === "LEAD"
-                          ? "bg-warning text-dark"
-                          : "bg-danger"
-                    }`}
-                  >
-                    {m.status}
-                  </span>
-                </td>
-
-                <td>
-                  <div style={styles.actions}>
-                    <FaEye
-                      style={{ color: "#3498db", cursor: "pointer" }}
-                      onClick={() =>
-                        navigate(`/dashboard/members/${m.national_id}`)
-                      }
-                    />
-                    <FaComment
-                      style={{ color: "#f39c12", cursor: "pointer" }}
-                    />
-                  </div>
+            {hasNoResults ? (
+              <tr>
+                <td
+                  colSpan="13"
+                  style={{ textAlign: "center", padding: "20px" }}
+                >
+                  No Lead Member found
                 </td>
               </tr>
-            ))}
+            ) : (
+              filteredLeadMembers?.map((m, index) => (
+                <tr
+                  key={m.uid}
+                  style={{
+                    background: "#f9f9f9",
+                    borderBottom: "1px solid #ddd",
+                  }}
+                >
+                  <td>{index + 1}</td>
+                  <td>{m.national_id}</td>
+
+                  <td>
+                    {m.first_name} {m.last_name}
+                  </td>
+
+                  <td>
+                    <div>
+                      <div>{new Date(m.created_at).toLocaleDateString()}</div>
+                      <small style={styles.time}>
+                        {new Date(m.created_at).toLocaleTimeString()}
+                      </small>
+                    </div>
+                  </td>
+
+                  <td>
+                    {/* Name: {m.added_by.username}<br /> */}
+                    Role: BRANCH-MAN
+                  </td>
+
+                  <td style={styles.phone}>{m.primary_mobile}</td>
+
+                  <td>
+                    HQ
+                    <br />
+                    <small>Prod: CurePlus</small>
+                  </td>
+
+                  <td>--</td>
+
+                  <td>{m.physical_address}</td>
+
+                  <td>
+                    <span
+                      className={`badge px-2 py-1 ${
+                        m.status === "ACTIVE"
+                          ? "bg-success"
+                          : m.status === "LEAD"
+                            ? "bg-warning text-dark"
+                            : "bg-danger"
+                      }`}
+                    >
+                      {m.status}
+                    </span>
+                  </td>
+
+                  <td>
+                    <div style={styles.actions}>
+                      <FaEye
+                        style={{ color: "#3498db", cursor: "pointer" }}
+                        onClick={() =>
+                          navigate(`/dashboard/members/${m.national_id}`)
+                        }
+                      />
+                      <FaComment
+                        style={{ color: "#f39c12", cursor: "pointer" }}
+                      />
+                    </div>
+                  </td>
+                </tr>
+              ))
+            )}
           </tbody>
         </table>
       </div>
@@ -291,8 +316,6 @@ const styles = {
     borderCollapse: "collapse",
     minWidth: "1000px",
   },
-
-  
 
   actions: {
     display: "flex",

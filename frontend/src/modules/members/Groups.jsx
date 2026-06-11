@@ -2,36 +2,51 @@ import { useEmployers, useAddEmployer } from "../../hooks/useEmployers";
 import { FaEye, FaComment, FaPlus, FaSearch } from "react-icons/fa";
 import AddEmployerModal from "../../modals/customer/AddEmployerModal";
 import AddLoanModal from "../../modals/customer/AddLoanModal";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 function Groups() {
   const { employers, isPending, error } = useEmployers();
   const { addEmployer } = useAddEmployer();
-
+  const [selectedGroup, setSelectedGroup] = useState("");
+  const [searchTerm, setSearchTerm] = useState("");
+  const navigate = useNavigate();
   if (isPending) return <div style={styles.state}>Loading...</div>;
   if (error) return <div style={styles.state}>Error loading employers</div>;
+
+  const filteredEmployers = employers.filter((e) => {
+    const term = searchTerm.toLowerCase();
+    return (
+      e?.name?.toLowerCase().includes(term) ||
+      e?.risk_tier?.toLowerCase().includes(term) ||
+      e?.status?.toLowerCase().includes(term) ||
+      e?.deduction_cycle?.toLowerCase().includes(term)
+    );
+  });
+  const hasNoResults = filteredEmployers && filteredEmployers.length === 0;
 
   return (
     <div style={styles.page}>
       {/* HEADER */}
       <div style={styles.header}>
-        <h2>Groups <span style={styles.subTitle}>List</span></h2>
+        <h2>
+          Groups <span style={styles.subTitle}>List</span>
+        </h2>
 
-        <div style={styles.breadcrumb}>
-          Home &gt; Customer
-        </div>
+        <div style={styles.breadcrumb}>Home &gt; Customer</div>
       </div>
 
       {/* TOOLBAR */}
       <div style={styles.toolbar}>
-       
-
         <select style={styles.select}>
           <option>All Branches</option>
         </select>
 
-        <button style={styles.addBtn}
-         data-bs-toggle="modal"
-         data-bs-target="#addEmployerModal">
+        <button
+          style={styles.addBtn}
+          data-bs-toggle="modal"
+          data-bs-target="#addEmployerModal"
+        >
           <FaPlus /> ADD NEW
         </button>
       </div>
@@ -39,24 +54,28 @@ function Groups() {
       {/* SEARCH ROW */}
       <div style={styles.searchRow}>
         <div style={styles.record}>
-          <span style={styles.badgeCount}>{employers?.length || 0}</span>
+          <span style={styles.badgeCount}>
+            {filteredEmployers?.length || 0}
+          </span>
           Record Found
         </div>
 
         <div style={styles.searchBox}>
           <input
-            placeholder="Enter text and hit search button"
+            placeholder="Search by name, deduction cycle, status or risk tier"
             style={styles.input}
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
           />
-          <button style={styles.searchBtn}>
-            <FaSearch /> Search
-          </button>
         </div>
       </div>
 
       {/* TABLE */}
       <div style={styles.tableWrapper}>
-        <table style={styles.table} className="table table-striped table-responsive table-bordered">
+        <table
+          style={styles.table}
+          className="table table-striped table-responsive table-bordered"
+        >
           <thead>
             <tr>
               <th>ID</th>
@@ -65,37 +84,55 @@ function Groups() {
               <th>Max Exposure</th>
               <th>Risk Tier</th>
               <th>Total Loans</th>
-              
+
               <th>Branch</th>
-              
+
               <th>Status</th>
               <th>Action</th>
             </tr>
           </thead>
 
           <tbody>
-            {employers?.map((e, index) => (
-              <tr key={e.id} style={{ background: "#f9f9f9", borderBottom: "1px solid #ddd" }}>
-                <td>{index + 1}</td>
-                <td>{e.name}</td>
-                <td>{e.financial.total_members}</td>
-                <td>{e.max_exposure}</td>
-                <td>{e.risk_tier}</td>
-                <td>{e.financial.loan_total}</td>
-                <td>{e.branch}--</td>
-                <td>
-                  <span style={styles.status}>{e.status}</span>
+            {hasNoResults ? (
+              <tr>
+                <td
+                  colSpan="9"
+                  style={{ textAlign: "center", padding: "20px" }}
+                >
+                  No Loan found
                 </td>
-                <td>
-                  <div style={styles.actions}>
-                    <FaEye style={{ color: "#3498db", cursor: "pointer" }} />
-                    {/* <FaComment style={{ color: "#f39c12", cursor: "pointer" }} /> */}
-                  </div>
-                </td>
-
-                
               </tr>
-            ))}
+            ) : (
+              filteredEmployers?.map((e, index) => (
+                <tr
+                  key={e.id}
+                  style={{
+                    background: "#f9f9f9",
+                    borderBottom: "1px solid #ddd",
+                  }}
+                >
+                  <td>{index + 1}</td>
+                  <td>{e.name}</td>
+                  <td>{e.financial.total_members}</td>
+                  <td>{e.max_exposure}</td>
+                  <td>{e.risk_tier}</td>
+                  <td>{e.financial.loan_total}</td>
+                  <td>{e.branch || "--"}</td>
+                  <td>
+                    <span style={styles.status}>{e.status}</span>
+                  </td>
+                  <td>
+                    <div style={styles.actions}>
+                      <FaEye
+                        style={{ color: "#3498db", cursor: "pointer" }}
+                        onClick={() => navigate(`/dashboard/groups/${e.id}`)}
+                      />
+                      {/* <FaComment style={{ color: "#f39c12", cursor: "pointer" }} /> */}
+                    </div>
+                  </td>
+                </tr>
+              ))
+            )}
           </tbody>
         </table>
       </div>
@@ -115,7 +152,6 @@ function Groups() {
         </div>
       </div>
       <AddEmployerModal addEmployer={addEmployer} />
-   
     </div>
   );
 }
