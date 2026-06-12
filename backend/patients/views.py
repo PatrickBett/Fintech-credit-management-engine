@@ -47,6 +47,25 @@ class CustomerStatusUpdateView(APIView):
         serializer = CustomerSerializer(customer)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
+# update  the customer limit
+class CustomerLimitUpdateView(APIView):
+    def patch(self, request, pk):
+        try:
+            customer = Customer.objects.get(pk=pk)
+        except Customer.DoesNotExist:
+            return Response({"detail":"Customer Not Found"},status=status.HTTP_404_NOT_FOUND)
+        limit = request.data.get('limit')
+        if limit is None:
+            return Response({"detail":"Limit is required"},status=status.HTTP_400_BAD_REQUEST)
+        try:
+            customer.limit = limit
+            customer.save()
+        except Exception:
+            return Response({"detail":"Invalid Limit Value"},status=status.HTTP_400_BAD_REQUEST)
+        serializer = CustomerSerializer(customer)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+
 class ProductListCreateView(APIView):
     def get(self, request):
         products = Product.objects.all()

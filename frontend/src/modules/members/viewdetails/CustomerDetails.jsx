@@ -9,6 +9,7 @@ import EditMemberModal from "../../../modals/customer/EditMemberModal";
 import AddRefereeModal from "../../../modals/customer/AddRefereeModal";
 import ConfirmModal from "../../../modals/customer/ConfirmModal";
 import EditStatusModal from "../../../modals/customer/EditStatusModal";
+import EditLimitModal from "../../../modals/customer/EditLimitModal";
 import AddLoanModal from "../../../modals/customer/AddLoanModal";
 function CustomerDetails() {
   const { national_id } = useParams();
@@ -18,6 +19,7 @@ function CustomerDetails() {
   const { payments } = usePayments();
   const [selectedMember, setSelectedMember] = useState(null);
   const [status, setStatus] = useState("");
+  const [limit, setLimit] = useState("")
   const [activeTab, setActiveTab] = useState("Bio Info");
   console.log("Referees", referees);
   if (!referees) return <div className="p-3">Loading...</div>;
@@ -629,13 +631,21 @@ function CustomerDetails() {
                   className="btn btn-success w-100 mb-2"
                   data-bs-toggle="modal"
                   data-bs-target="#addLoanModal"
-                  onClick={()=>setSelectedMember(customer)}
+                  onClick={() => setSelectedMember(customer)}
                 >
                   ➕ Give a Loan
                 </button>
               )}
 
-              <button className="btn btn-dark w-100 mb-2">
+              <button
+                className="btn btn-dark w-100 mb-2"
+                data-bs-toggle="modal"
+                data-bs-target="#editLimitModal"
+                onClick={() => {
+                  setSelectedMember(customer);
+                  setLimit(customer.limit);
+                }}
+              >
                 ⚡ Update Limit
               </button>
 
@@ -693,7 +703,12 @@ function CustomerDetails() {
         setStatus={setStatus}
         customerId={selectedMember?.uid}
       />
-      <AddLoanModal selectedMember = {selectedMember} />
+      <AddLoanModal selectedMember={selectedMember} />
+      <EditLimitModal
+        limit={limit}
+        setLimit={setLimit}
+        customerId={selectedMember?.uid}
+      />
     </div>
   );
 }

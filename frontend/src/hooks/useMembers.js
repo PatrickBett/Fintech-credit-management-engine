@@ -103,3 +103,23 @@ export const useUpdateMemberStatus = () => {
     },
   });
 };
+
+//UPDATE CUSTOMER LIMIT
+export const useUpdateMemberLimit = () => {
+  const queryClient = useQueryClient();
+
+  const updateLimit = async ({ id, limit }) => {
+    const res = await api.patch(
+      `http://127.0.0.1:8000/api/members/${id}/update-limit/`,
+      { limit }
+    );
+    return res.data;
+  };
+
+  return useMutation({
+    mutationFn: updateLimit,
+    onSuccess: () => {
+      queryClient.invalidateQueries(["members"]);
+    },
+  });
+};
